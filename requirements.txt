@@ -1,0 +1,12 @@
+openai
+python-dotenv
+pymupdf
+numpy
+pandas
+scikit-learn
+sentence-transformers
+transformers
+huggingface-hub
+torch
+onnxruntime
+fastembed
