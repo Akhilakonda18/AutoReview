@@ -1,3 +1,6 @@
+
+import re
+
 from agents.base_agent import BaseAgent
 from core.llm_service import ask_qwen
 
@@ -5,122 +8,97 @@ from core.llm_service import ask_qwen
 class ReviewerAgent(BaseAgent):
 
     def __init__(self):
-
-        super().__init__(
-            "Final Reviewer Agent"
-        )
+        super().__init__("Final Reviewer Agent")
 
     def build_prompt(
         self,
         paper_text,
         agent_results,
         agent_scores,
-        overall_score
+        overall_score,
     ):
+        score_text = "\n".join(
+            f"- {name}: {score}/10"
+            for name, score in agent_scores.items()
+        )
+
+        # Normalize specialist results for the prompt.
+        reviews_text = "\n\n".join(
+            f"===== {name} =====\n{review}"
+            for name, review in agent_results.items()
+        )
 
         prompt = f"""
 You are the Final Reviewer Agent in an automated
 research paper review system.
 
-You receive evaluations from seven specialized
-review agents.
+Consolidate the seven specialist reviews into one
+evidence-based final research paper review.
 
-Your task is to consolidate their findings into
-one final research paper review.
+IMPORTANT SCORING RULES:
+1. The overall score is calculated externally by
+   the score-fusion stage.
+2. The authoritative overall score is {overall_score}/10.
+3. You MUST reproduce this exact score in your output.
+4. Do not calculate, estimate, or change the overall score.
+5. Do not use 0/10 unless the supplied fused score is 0.
+6. Individual scores are provided for transparency.
 
-The specialized agents are:
-
-1. Structure Agent
-2. Novelty Agent
-3. Methodology Agent
-4. Literature Agent
-5. Experiment Agent
-6. Writing Agent
-7. Citation Agent
-
-IMPORTANT INSTRUCTIONS:
-
-- Base your assessment only on the research paper
-  and specialized agent results.
-- Do not invent facts.
-- Do not blindly agree with the agents.
-- Identify important disagreements.
-- Give more attention to repeated issues.
+REVIEW RULES:
+- Base your assessment on the paper and specialist reviews.
+- Do not invent facts, references, experiments, or results.
+- Identify meaningful disagreements between agents.
+- Give more attention to issues identified repeatedly.
 - Distinguish major issues from minor issues.
-- Keep the final review concise but informative.
-- The overall score below is calculated by Score Fusion.
-- Do not change the score.
+- Make recommendations specific and actionable.
+- Do not treat retrieved evidence as proof unless relevant.
+- If evidence is insufficient, state the limitation.
 
---------------------------------------------------
-FUSED AGENT SCORES
---------------------------------------------------
+FUSED INDIVIDUAL SCORES:
+{score_text}
 
-{agent_scores}
-
---------------------------------------------------
-FUSED OVERALL SCORE
---------------------------------------------------
-
+AUTHORITATIVE FUSED OVERALL SCORE:
 {overall_score}/10
 
---------------------------------------------------
-SPECIALIZED AGENT REVIEWS
---------------------------------------------------
+SPECIALIST REVIEWS:
+{reviews_text}
 
-{agent_results}
-
---------------------------------------------------
-RESEARCH PAPER
---------------------------------------------------
-
+RESEARCH PAPER:
 {paper_text}
 
---------------------------------------------------
-FINAL REVIEW FORMAT
---------------------------------------------------
-
-Return exactly this format:
+Return the following sections:
 
 OVERALL SCORE: {overall_score}/10
 
 OVERALL STRENGTHS:
-- point 1
-- point 2
-- point 3
+- Three key strengths
 
 OVERALL WEAKNESSES:
-- point 1
-- point 2
-- point 3
+- Three key weaknesses
 
 MAJOR ISSUES:
-- point 1
-- point 2
+- Important issues requiring substantial attention
 
 MINOR ISSUES:
-- point 1
-- point 2
+- Smaller issues that can be corrected
 
 AGENT DISAGREEMENTS:
-- point 1
-- point 2
+- Important disagreements between specialists
+- If there are none, state that explicitly
 
 PRIORITY IMPROVEMENTS:
-1. improvement 1
-2. improvement 2
-3. improvement 3
+1. Highest-priority improvement
+2. Second improvement
+3. Third improvement
 
 FINAL RECOMMENDATION:
-- Accept
-- Minor Revision
-- Major Revision
-- Reject
+Choose exactly one: Accept, Minor Revision,
+Major Revision, or Reject.
 
 REASON:
-Explain the recommendation briefly based only
-on the evidence provided by the paper and agents.
+Briefly justify the recommendation using the available
+paper findings and specialist reviews.
 """
-
         return prompt
 
     def review(
@@ -128,50 +106,84 @@ on the evidence provided by the paper and agents.
         paper_text,
         agent_results,
         agent_scores=None,
-        overall_score=None
+        overall_score=None,
     ):
+        agent_scores = agent_scores or {}
 
-        if agent_scores is None:
-            agent_scores = {}
+        # Also support receiving the complete score dictionary
+        # from review_pipeline.py.
+        if isinstance(agent_scores, dict) and (
+            "individual_scores" in agent_scores
+            or "overall_score" in agent_scores
+        ):
+            score_data = agent_scores
+            agent_scores = score_data.get(
+                "individual_scores", {}
+            )
+
+            if overall_score is None:
+                overall_score = score_data.get("overall_score")
 
         if overall_score is None:
-            overall_score = 0
+            raise ValueError(
+                "The fused overall score was not supplied "
+                "to ReviewerAgent."
+            )
+
+        overall_score = round(float(overall_score), 2)
 
         prompt = self.build_prompt(
             paper_text,
             agent_results,
             agent_scores,
-            overall_score
+            overall_score,
         )
 
         try:
-
-            # IMPORTANT:
-            # Do not pass max_retries here.
-            # ask_qwen() does not accept it.
-
             response = ask_qwen(
                 prompt,
-                max_tokens=1800
+                max_tokens=1800,
             )
+
+            if not response:
+                raise ValueError(
+                    "The language model returned an empty review."
+                )
+
+            response = str(response).strip()
+
+            # Enforce the authoritative fused score even if
+            # the language model generates a conflicting score.
+            score_line = f"OVERALL SCORE: {overall_score:.2f}/10"
+
+            if re.search(
+                r"^\s*OVERALL\s+SCORE\s*:.*$",
+                response,
+                flags=re.IGNORECASE | re.MULTILINE,
+            ):
+                response = re.sub(
+                    r"^\s*OVERALL\s+SCORE\s*:.*$",
+                    score_line,
+                    response,
+                    count=1,
+                    flags=re.IGNORECASE | re.MULTILINE,
+                )
+            else:
+                response = score_line + "\n\n" + response
 
             return {
                 "agent": self.name,
-                "review": response
+                "review": response,
             }
 
-        except Exception as e:
-
-            print(
-                "\nERROR while running "
-                "Final Reviewer:"
-            )
-
-            print(e)
+        except Exception as exc:
+            print("\nERROR while running Final Reviewer:")
+            print(exc)
 
             return {
                 "agent": self.name,
-                "review":
+                "review": (
                     "Final Reviewer Agent failed.\n\n"
-                    f"Error: {str(e)}"
+                    f"Error: {exc}"
+                ),
             }

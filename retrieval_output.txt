@@ -1,0 +1,331 @@
+======================================================================
+AUTOREVIEW - RETRIEVAL QUALITY TEST
+======================================================================
+
+Step 1: Extracting research paper...
+Extracted characters: 92,564
+
+Step 2: Identifying paper sections...
+Sections detected: 7
+
+Step 3: Testing agent-specific retrieval...
+
+======================================================================
+AGENT: Structure Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique scientific paper organization section structure logical flow academic writing completeness Evaluate research paper organization, logical flow, section completeness, and structural consistency.
+Loading 3 reference PDF(s)...
+Processing reference PDF: reference paper1.pdf
+Processing reference PDF: reference paper2.pdf
+Processing reference PDF: reference paper3.pdf
+Reference PDF chunks cached: 53
+Reference TF-IDF index built: (53, 13628)
+Loading saved arXiv index...
+arXiv index cached: 240 papers
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.0788
+RRF score: 0.020161
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper2.pdf
+Similarity: 0.0798
+RRF score: 0.020492
+Preview:
+LLMs, research on RAG initially focused on leveraging the powerful in context learning abilities of LLMs, primarily concentrating on the inference stage. Subsequent research has delved deeper, gradually integrating more with the fine-tuning of LLMs. Researchers have also been exploring ways to enhan
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0665
+RRF score: 0.019531
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 4
+Title: reference paper1.pdf
+Similarity: 0.0627
+RRF score: 0.019231
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.0529
+RRF score: 0.018939
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+======================================================================
+AGENT: Novelty Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique research novelty originality contributions comparison existing methods research gaps Evaluate research originality, research contributions, novel ideas, and differences from existing approaches.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.1376
+RRF score: 0.020492
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.0933
+RRF score: 0.020161
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0903
+RRF score: 0.019841
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+Evidence 4
+Title: Towards automated Capability Assessment leveraging Deep Learning
+Similarity: 0.0753
+RRF score: 0.016393
+Preview:
+Towards automated Capability Assessment leveraging Deep Learning Towards automated Capability Assessment leveraging Deep Learning  Aiming for a higher economic efficiency in manufacturing, an increased degree of automation is a key enabler. However, assessing the technical feasibility of an automate
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.0774
+RRF score: 0.019231
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+======================================================================
+AGENT: Methodology Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique research methodology algorithms system architecture implementation reproducibility Evaluate the research methodology, proposed approach, algorithm design, implementation details, and reproducibility.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.1008
+RRF score: 0.020492
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.0817
+RRF score: 0.020161
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0775
+RRF score: 0.019841
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 4
+Title: reference paper1.pdf
+Similarity: 0.0676
+RRF score: 0.019531
+Preview:
+Automated Literature Review Using NLP Techniques and LLM-Based Retrieval-Augmented Generation Nurshat Fateh Ali Department of Computer Science and Engineering Military Institute of Science and Technology Dhaka, Bangladesh nurshatfateh@gmail.com Shakil Mosharrof Department of Computer Science and Eng
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.0648
+RRF score: 0.019231
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+======================================================================
+AGENT: Literature Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique automated scientific peer review related work literature review previous research comparison research gaps Evaluate the literature review, related work, coverage of previous research, comparison with existing methods, and identification of research gaps.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.1642
+RRF score: 0.020492
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.1385
+RRF score: 0.020161
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.1237
+RRF score: 0.019841
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+Evidence 4
+Title: reference paper1.pdf
+Similarity: 0.1123
+RRF score: 0.019531
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.1117
+RRF score: 0.019231
+Preview:
+Automated Literature Review Using NLP Techniques and LLM-Based Retrieval-Augmented Generation Nurshat Fateh Ali Department of Computer Science and Engineering Military Institute of Science and Technology Dhaka, Bangladesh nurshatfateh@gmail.com Shakil Mosharrof Department of Computer Science and Eng
+
+======================================================================
+AGENT: Experiment Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique experimental evaluation datasets baselines metrics results ablation studies statistical significance Evaluate experimental design, datasets, baselines, evaluation metrics, results, and the strength of supporting evidence.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.0717
+RRF score: 0.020161
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.0680
+RRF score: 0.019231
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0655
+RRF score: 0.018939
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 4
+Title: Towards automated Capability Assessment leveraging Deep Learning
+Similarity: 0.0907
+RRF score: 0.016393
+Preview:
+Towards automated Capability Assessment leveraging Deep Learning Towards automated Capability Assessment leveraging Deep Learning  Aiming for a higher economic efficiency in manufacturing, an increased degree of automation is a key enabler. However, assessing the technical feasibility of an automate
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.0588
+RRF score: 0.018657
+Preview:
+Pipeline using LLM The next step is to implement a system pipeline by using the LLM to generate a literature review segment automatically. The system takes PDFs of multiple papers as input. It uses the PYPDF2 library to extract the entire text of each PDF. Then it creates a new thread with the extra
+
+======================================================================
+AGENT: Writing Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique academic scientific writing clarity grammar readability terminology consistency Evaluate academic writing quality, clarity, grammar, readability, terminology, and consistency.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.0909
+RRF score: 0.020492
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.0644
+RRF score: 0.020161
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0601
+RRF score: 0.019841
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+Evidence 4
+Title: reference paper1.pdf
+Similarity: 0.0573
+RRF score: 0.019531
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+Evidence 5
+Title: Evaluation of Retinal Image Quality Assessment Networks in Different Color-spaces
+Similarity: 0.0981
+RRF score: 0.016393
+Preview:
+Evaluation of Retinal Image Quality Assessment Networks in Different Color-spaces Evaluation of Retinal Image Quality Assessment Networks in Different Color-spaces  Retinal image quality assessment (RIQA) is essential for controlling the quality of retinal imaging and guaranteeing the reliability of
+
+======================================================================
+AGENT: Citation Agent
+======================================================================
+
+Retrieval query:
+automated scientific peer review manuscript assessment large language models LLM reviewer feedback RAG evidence grounded critique academic citations references bibliography citation completeness evidence supported claims Evaluate citation quality, reference completeness, citation consistency, and whether research claims are appropriately supported.
+
+Retrieved evidence chunks: 5
+
+Evidence 1
+Title: reference paper1.pdf
+Similarity: 0.0811
+RRF score: 0.020492
+Preview:
+priorities concerning the review emphasis. Synthesizing integrates data from numerous sources and provides an overview of the outcomes. The formulation of research questions, reporting phase, and peer review are some steps that are also discussed for the composition of systematic literature reviews.
+
+Evidence 2
+Title: reference paper1.pdf
+Similarity: 0.0755
+RRF score: 0.020161
+Preview:
+can be a time-consuming, tedious, and error-prone task. Due to these difficulties, there has been an increasing interest in automating the process of literature reviews [1]. Automated systems can use natural language processing techniques and machine learning algorithms to analyze extensive amounts 
+
+Evidence 3
+Title: reference paper1.pdf
+Similarity: 0.0563
+RRF score: 0.019841
+Preview:
+and comparing vari- ous NLP techniques for automated literature review. All three implemented systems are successful in generating the coherent Literature Review segment of a research paper. The results of various Natural Language Processing techniques such as the Frequency-based approach, Transform
+
+Evidence 4
+Title: reference paper1.pdf
+Similarity: 0.0467
+RRF score: 0.019531
+Preview:
+Automated Literature Review Using NLP Techniques and LLM-Based Retrieval-Augmented Generation Nurshat Fateh Ali Department of Computer Science and Engineering Military Institute of Science and Technology Dhaka, Bangladesh nurshatfateh@gmail.com Shakil Mosharrof Department of Computer Science and Eng
+
+Evidence 5
+Title: reference paper1.pdf
+Similarity: 0.0443
+RRF score: 0.018939
+Preview:
+benefits of automating the process. The main focus of their contributions is the evaluation of Mistral LLM’s effectiveness in the field of Academic Research. The gaps in the intersection of systematic literature reviews (SLRs) and LLMs are discussed by Susnjak et. al. [12]. They also emphasized the 
+
+======================================================================
+RETRIEVAL QUALITY TEST COMPLETED
+======================================================================

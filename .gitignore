@@ -1,5 +1,7 @@
 .env
 venv/
+.venv/
 __pycache__/
 *.pyc
 .vscode/
+.ipynb_checkpoints/data/research_dataset/
