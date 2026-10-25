@@ -1,0 +1,16 @@
+ .gitignore                      |   4 [32m+[m[31m-[m
+ agents/agent_manager.py         | 110 [32m++++[m[31m--[m
+ agents/reviewer_agent.py        | 212 [32m++++++[m[31m------[m
+ autoreview_output.txt           | 658 [32m+++++++++++++++++++++++++++++++++++[m
+ core/build_dataset_index.py     | 110 [32m++++++[m
+ core/rag.py                     | 743 [32m+++++++++++++++++++++++++++++++++++[m[31m-----[m
+ core/review_pipeline.py         | 631 [32m+++++++++++++++++++++++++++[m[31m-------[m
+ core/score_fusion.py            | 108 [32m+++[m[31m---[m
+ core/section_identifier.py      | 131 [32m+++++[m[31m--[m
+ core/test_combined_rag.py       |  25 [32m++[m
+ core/test_dataset_retrieval.py  |  51 [32m+++[m
+ core/test_section_identifier.py |  54 [32m+++[m
+ outputs/autoreview_report.txt   | 284 [32m+++++++[m[31m--------[m
+ retrieval_output.txt            | 331 [32m++++++++++++++++++[m
+ test_retrieval.py               |  91 [32m+++++[m
+ 15 files changed, 2954 insertions(+), 589 deletions(-)

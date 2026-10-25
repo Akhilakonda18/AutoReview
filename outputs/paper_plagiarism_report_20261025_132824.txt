@@ -1,0 +1,42 @@
+========================================================================
+AUTOREVIEW - PLAGIARISM SIMILARITY REPORT
+========================================================================
+
+Submitted paper: C:\major project\Autoreview\data\sample papers\paper.pdf
+Generated at: 2026-10-25T13:28:24.445526
+
+SUMMARY
+------------------------------------------------------------------------
+Submitted Word Count: 14507
+Flagged Passage Count: 1
+Exact Match Count: 0
+High Similarity Count: 0
+Moderate Similarity Count: 0
+Semantic Similarity Count: 1
+Estimated Flagged Word Coverage Percent: 0.69
+Status: POTENTIAL SIMILARITY FOUND
+
+LOCAL REFERENCE MATCHES
+------------------------------------------------------------------------
+
+Match 1
+Source: reference paper3.pdf
+Source type: local_pdf
+Match type: SEMANTIC_SIMILARITY
+Detection methods: SEMANTIC_SIMILARITY
+Similarity score: 70.16%
+Submitted word range: 6715 - 6815
+Source path/URL: C:\major project\Autoreview\data\reference papers\reference paper3.pdf
+Submitted passage:
+computational linguistics volume 1 long papers pp 6985 7001 2024 du j wang y zhao w deng z liu s lou r zou h p narayanan venkit p zhang n srinath m zhang h r gupta v li y li t wang f liu q liu t gao p xia c xing c jiayang c wang z su y shah r s guo r gu j li h wei k wang z cheng l ranathunga s fang m fu j liu f huang r blanco e cao y zhang r yu p s and yin w llms assist nlp researchers
+Reference passage:
+association for computational linguistics emnlp 2023 pp 9248 9274 singapore december 2023 association for computational linguistics doi 10 18653 v1 2023 findings emnlp 620 url https aclanthology org 2023 findings emnlp 620 weijia shi sewon min michihiro yasunaga minjoon seo richard james mike lewis luke zettlemoyer and wen tau yih replug retrieval augmented black box language models in kevin duh helena gomez and steven bethard eds proceedings of the 2024 conference of the north american chapter of the association for computational linguistics human language technologies volume 1 long papers pp 8371 8384 mexico city mexico june 2024 association for computational
+----------------------------------------
+
+ARXIV ABSTRACT MATCHES
+------------------------------------------------------------------------
+No abstract-level matches were reported. This does not establish that no related paper exists.
+
+IMPORTANT DISCLAIMER
+------------------------------------------------------------------------
+Similarity is evidence for investigation, not proof of plagiarism. Results cover only the sources checked. Semantic similarity may flag legitimate common concepts. Human review of source passages, citations and quotations is required.

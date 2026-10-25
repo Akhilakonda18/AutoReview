@@ -1,0 +1,267 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+
+================================================================
+AUTOREVIEW PLAGIARISM CHECKER
+================================================================
+
+Submitted PDF: data\sample papers\paper.pdf
+
+[1/7] Extracting submitted paper text...
+
+============================================================
+REFERENCE SECTION DIAGNOSTICS
+============================================================
+
+Detected heading: 'References'
+Heading position: 43031 characters
+Total extracted words: 14507
+Main-text words: 6612
+Bibliography words: 7838
+Trimmed obvious prompt/template text after bibliography.
+
+--- LAST 500 CHARACTERS OF MAIN TEXT ---
+y address data privacy and confidentiality concerns.
+We strongly advocate for the responsible use of AI in peer
+review and emphasize the need for continued discussion on
+ethical safeguards and best practices for its integration.
+Acknowledgements
+This work was supported partially by the National Nat-
+ural Science Foundation of China (Grant No.62376267),
+the 2035 project of CASIA, the innoHK project, and the
+Strategic Priority Research Program of Chinese Academy
+of Sciences under Grant XDA0480200.
+
+--- FIRST 1,000 CHARACTERS OF BIBLIOGRAPHY ---
+Baek, J., Jauhar, S. K., Cucerzan, S., and Hwang, S. J.
+Researchagent: Iterative research idea generation over
+scientific literature with large language models. arXiv
+preprint arXiv:2404.07738, 2024.
+Chang, M., Chhablani, G., Clegg, A., Cote, M. D., Desai,
+R., Hlavac, M., Karashchuk, V., Krantz, J., Mottaghi, R.,
+Parashar, P., et al. Partnr: A benchmark for planning and
+reasoning in embodied multi-agent tasks. arXiv preprint
+arXiv:2411.00081, 2024.
+D’Arcy, M., Ross, A., Bransom, E., Kuehl, B., Bragg, J.,
+Hope, T., and Downey, D. ARIES: A corpus of scientific
+paper edits made in response to peer reviews. In Asso-
+ciation for Computational Linguistics (Volume 1: Long
+Papers), pp. 6985–7001, 2024.
+Du, J., Wang, Y., Zhao, W., Deng, Z., Liu, S., Lou, R.,
+Zou, H. P., Narayanan Venkit, P., Zhang, N., Srinath, M.,
+Zhang, H. R., Gupta, V., Li, Y., Li, T., Wang, F., Liu, Q.,
+Liu, T., Gao, P., Xia, C., Xing, C., Jiayang, C., Wang, Z.,
+Su, Y., Shah, R. S., Guo, R., Gu, J., Li, H., Wei, K., Wang,
+Z
+
+--- LAST 500 CHARACTERS OF BIBLIOGRAPHY ---
+ ‘keywords_to_merge‘ is a list of subsets of keywords that can be merged and does
+not need to include all keywords.
+- The ‘merged_keyword‘ must represent the most specific common concept and should
+not be overly broad (e.g., not "artificial intelligence," "neural networks," or "
+deep learning").
+- The ‘merged_keyword‘ should be concise.
+- The merged_description should focus solely on the merged_keyword itself, and does
+not reference the keywords being merged.
+**Input: keywords_and_descriptions**
+============================================================
+
+Total extracted words: 14507
+Main-text words: 6612
+Bibliography words: 7838
+References section detected.
+
+[2/7] Splitting main text into passages...
+Main-text passages created: 76
+
+[3/7] Loading local reference PDFs...
+
+============================================================
+REFERENCE SECTION DIAGNOSTICS
+============================================================
+
+Detected heading: 'REFERENCES'
+Heading position: 25528 characters
+Total extracted words: 4060
+Main-text words: 3909
+Bibliography words: 150
+
+--- LAST 500 CHARACTERS OF MAIN TEXT ---
+ai HC, Huang YF, Kuo CW. Comparative analysis of automatic liter- 
+ature review using mistral large language model and human reviewers. 
+[12] Susnjak T, Hwang P, Reyes NH, Barczak AL, McIntosh TR, Ranathunga 
+S. Automating research synthesis with domain-specific large language 
+model fine-tuning. arXiv preprint arXiv:2404.08680. 2024 Apr 8. 
+[13] AllenAI. SCITL-DR Dataset. [Dataset]. Hugging Face. [Online]. Avail- 
+able: https://huggingface.co/datasets/allenai/scitldr. [Accessed: Sep. 8, 
+2024].
+
+--- FIRST 1,000 CHARACTERS OF BIBLIOGRAPHY ---
+[1] Felizardo KR, Carver JC. Automating systematic literature review. 
+Contemporary empirical methods in software engineering. 2020:327-55. 
+[2] Adhikari S. Nlp based machine learning approaches for text summariza- 
+tion. In2020 Fourth International Conference on Computing Methodolo- 
+gies and Communication (ICCMC) 2020 Mar 11 (pp. 535-538). IEEE. 
+[3] Cachola I, Lo K, Cohan A, Weld DS. TLDR: Extreme summarization 
+of scientific documents. arXiv preprint arXiv:2004.15011. 2020 Apr 30. 
+[4] Jugran S, Kumar A, Tyagi BS, Anand V. Extractive automatic text 
+summarization using SpaCy in Python & NLP. In2021 International 
+conference on advance computing and innovative technologies in en- 
+gineering (ICACITE) 2021 Mar 4 (pp. 582-585). IEEE. 
+[5] Ali NF, Tanvin JU, Islam MR, Ahmed J, Akhtaruzzaman M. ROUGE 
+Score Analysis and Performance Evaluation Between Google T5 and 
+SpaCy for YouTube News Video Summarization. In2023 26th Interna- 
+tional Conference on Computer and Information Technology 
+
+--- LAST 500 CHARACTERS OF BIBLIOGRAPHY ---
+active automatic text 
+summarization using SpaCy in Python & NLP. In2021 International 
+conference on advance computing and innovative technologies in en- 
+gineering (ICACITE) 2021 Mar 4 (pp. 582-585). IEEE. 
+[5] Ali NF, Tanvin JU, Islam MR, Ahmed J, Akhtaruzzaman M. ROUGE 
+Score Analysis and Performance Evaluation Between Google T5 and 
+SpaCy for YouTube News Video Summarization. In2023 26th Interna- 
+tional Conference on Computer and Information Technology (ICCIT) 
+2023 Dec 13 (pp. 1-6). IEEE.
+============================================================
+
+Loaded reference PDF: reference paper1.pdf
+  Total words: 4060 | Main text: 3909 | Bibliography: 150
+
+============================================================
+REFERENCE SECTION DIAGNOSTICS
+============================================================
+
+Detected heading: 'REFERENCES'
+Heading position: 74222 characters
+Total extracted words: 16502
+Main-text words: 10771
+Bibliography words: 5730
+
+--- LAST 500 CHARACTERS OF MAIN TEXT ---
+ AI deploy-
+ment, attracting interest from academic and industrial sectors.
+
+
+17
+The growing ecosystem of RAG is evidenced by the rise in
+RAG-centric AI applications and the continuous development
+of supportive tools. As RAG’s application landscape broadens,
+there is a need to refine evaluation methodologies to keep
+pace with its evolution. Ensuring accurate and representative
+performance assessments is crucial for fully capturing RAG’s
+contributions to the AI research and development community.
+
+--- FIRST 1,000 CHARACTERS OF BIBLIOGRAPHY ---
+[1] N. Kandpal, H. Deng, A. Roberts, E. Wallace, and C. Raffel, “Large
+language models struggle to learn long-tail knowledge,” in Interna-
+tional Conference on Machine Learning.
+PMLR, 2023, pp. 15 696–
+15 707.
+[2] Y. Zhang, Y. Li, L. Cui, D. Cai, L. Liu, T. Fu, X. Huang, E. Zhao,
+Y. Zhang, Y. Chen et al., “Siren’s song in the ai ocean: A survey on hal-
+lucination in large language models,” arXiv preprint arXiv:2309.01219,
+2023.
+[3] D. Arora, A. Kini, S. R. Chowdhury, N. Natarajan, G. Sinha, and
+A. Sharma, “Gar-meets-rag paradigm for zero-shot information re-
+trieval,” arXiv preprint arXiv:2310.20158, 2023.
+[4] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, N. Goyal,
+H. K¨uttler, M. Lewis, W.-t. Yih, T. Rockt¨aschel et al., “Retrieval-
+augmented generation for knowledge-intensive nlp tasks,” Advances in
+Neural Information Processing Systems, vol. 33, pp. 9459–9474, 2020.
+[5] S. Borgeaud, A. Mensch, J. Hoffmann, T. Cai, E. Rutherford, K. Milli-
+can, G. B. Van Den Driessche, J.-
+
+--- LAST 500 CHARACTERS OF BIBLIOGRAPHY ---
+ A. Nagrani, P. H. Seo, A. Miech, J. Pont-Tuset, I. Laptev,
+J. Sivic, and C. Schmid, “Vid2seq: Large-scale pretraining of a visual
+language model for dense video captioning,” in Proceedings of the
+IEEE/CVF Conference on Computer Vision and Pattern Recognition,
+2023, pp. 10 714–10 726.
+[182] N. Nashid, M. Sintaha, and A. Mesbah, “Retrieval-based prompt
+selection for code-related few-shot learning,” in 2023 IEEE/ACM 45th
+International Conference on Software Engineering (ICSE), 2023, pp.
+2450–2462.
+============================================================
+
+Loaded reference PDF: reference paper2.pdf
+  Total words: 16502 | Main text: 10771 | Bibliography: 5730
+
+============================================================
+REFERENCE SECTION DIAGNOSTICS
+============================================================
+
+Detected heading: 'REFERENCES'
+Heading position: 35371 characters
+Total extracted words: 16949
+Main-text words: 5777
+Bibliography words: 11171
+
+--- LAST 500 CHARACTERS OF MAIN TEXT ---
+e valuable knowl-
+edge until sufficient external information is obtained, at which point the results are presented to the
+user. To this end, we develop a method for autonomously synthesizing reasoning-based decision-
+making instructions in iterative retrieval and fine-tuned the latest open-source LLMs. Analysis re-
+sults demonstrate that Auto-RAG not only achieves outstanding performance but also retains a high
+degree of interpretability, offering users a more intuitive experience.
+10
+
+
+Preprint
+
+--- FIRST 1,000 CHARACTERS OF BIBLIOGRAPHY ---
+Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. Self-RAG: Learning
+to retrieve, generate, and critique through self-reflection. arXiv preprint arXiv:2310.11511, 2023.
+URL https://arxiv.org/abs/2310.11511.
+Jinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge,
+Yu Han, Fei Huang, Binyuan Hui, Luo Ji, Mei Li, Junyang Lin, Runji Lin, Dayiheng Liu, Gao Liu,
+Chengqiang Lu, Keming Lu, Jianxin Ma, Rui Men, Xingzhang Ren, Xuancheng Ren, Chuanqi
+Tan, Sinan Tan, Jianhong Tu, Peng Wang, Shijie Wang, Wei Wang, Shengguang Wu, Benfeng
+Xu, Jin Xu, An Yang, Hao Yang, Jian Yang, Shusheng Yang, Yang Yao, Bowen Yu, Hongyi
+Yuan, Zheng Yuan, Jianwei Zhang, Xingxuan Zhang, Yichang Zhang, Zhenru Zhang, Chang
+Zhou, Jingren Zhou, Xiaohuan Zhou, and Tianhang Zhu. Qwen technical report. arXiv preprint
+arXiv:2309.16609, 2023.
+Jonathan Berant, Andrew Chou, Roy Frostig, and Percy Liang. Semantic parsing on Freebase from
+question-answer pairs. In Proceedings
+
+--- LAST 500 CHARACTERS OF BIBLIOGRAPHY ---
+ts generation timing, depending on the availability of external knowledge.
+When external knowledge is unavailable, it continues retrieval rather than forcing a generation,
+thereby mitigating hallucination issues.
+Auto-RAG focuses on leveraging the inherent reasoning and decision-making capabilities of LLMs
+for iterative retrieval. Auto-RAG autonomously adjusts its retrieval strategy based on the complexity
+of the question and the availability of external knowledge, achieving improved results.
+32
+============================================================
+
+Loaded reference PDF: reference paper3.pdf
+  Total words: 16949 | Main text: 5777 | Bibliography: 11171
+Reference PDFs loaded: 3
+
+[4/7] Comparing main content against local PDFs...
+Exact matches: 0
+TF-IDF matches: 0
+Semantic comparison candidates: 75 submitted passages, 239 reference passages.
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]Loading weights: 100%|##########| 103/103 [00:00<00:00, 2545.70it/s]
+Semantic matches: 0
+Combined content match records: 0
+
+[5/7] Checking bibliography entries individually...
+Possible duplicate bibliography entry pairs: 0
+
+[6/7] Checking arXiv abstracts...
+Offline mode enabled; skipping arXiv search.
+
+[7/7] Calculating summary and writing reports...
+
+================================================================
+PLAGIARISM CHECK COMPLETE
+================================================================
+Status: NO MATCHES FOUND IN CHECKED SOURCES
+Estimated flagged-word coverage: 0.0%
+Exact match records: 0
+TF-IDF match records: 0
+Semantic match records: 0
+Possible duplicate bibliography entry pairs: 0
+
+TXT report: C:\major project\Autoreview\outputs\paper_plagiarism_report_20261025_151048.txt
+JSON report: C:\major project\Autoreview\outputs\paper_plagiarism_report_20261025_151048.json

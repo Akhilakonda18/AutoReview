@@ -1,0 +1,16 @@
+{
+    "submitted_pdf": "C:\\major project\\Autoreview\\data\\sample papers\\paper.pdf",
+    "generated_at": "2026-10-25T13:06:49.061872",
+    "summary": {
+        "submitted_word_count": 14507,
+        "flagged_passage_count": 0,
+        "exact_match_count": 0,
+        "high_similarity_count": 0,
+        "moderate_similarity_count": 0,
+        "estimated_flagged_word_coverage_percent": 0.0,
+        "status": "NO SIGNIFICANT MATCH FOUND IN CHECKED SOURCES"
+    },
+    "local_reference_matches": [],
+    "arxiv_abstract_matches": [],
+    "disclaimer": "This report flags textual similarity in the checked sources. It does not prove plagiarism and does not represent a comparison against the entire internet. Human review is required to assess citations, quotations, common technical language, and legitimate reuse."
+}

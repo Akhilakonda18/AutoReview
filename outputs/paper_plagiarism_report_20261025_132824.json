@@ -1,0 +1,32 @@
+{
+    "submitted_pdf": "C:\\major project\\Autoreview\\data\\sample papers\\paper.pdf",
+    "generated_at": "2026-10-25T13:28:24.445526",
+    "summary": {
+        "submitted_word_count": 14507,
+        "flagged_passage_count": 1,
+        "exact_match_count": 0,
+        "high_similarity_count": 0,
+        "moderate_similarity_count": 0,
+        "semantic_similarity_count": 1,
+        "estimated_flagged_word_coverage_percent": 0.69,
+        "status": "POTENTIAL SIMILARITY FOUND"
+    },
+    "local_reference_matches": [
+        {
+            "submitted_passage": "computational linguistics volume 1 long papers pp 6985 7001 2024 du j wang y zhao w deng z liu s lou r zou h p narayanan venkit p zhang n srinath m zhang h r gupta v li y li t wang f liu q liu t gao p xia c xing c jiayang c wang z su y shah r s guo r gu j li h wei k wang z cheng l ranathunga s fang m fu j liu f huang r blanco e cao y zhang r yu p s and yin w llms assist nlp researchers",
+            "reference_passage": "association for computational linguistics emnlp 2023 pp 9248 9274 singapore december 2023 association for computational linguistics doi 10 18653 v1 2023 findings emnlp 620 url https aclanthology org 2023 findings emnlp 620 weijia shi sewon min michihiro yasunaga minjoon seo richard james mike lewis luke zettlemoyer and wen tau yih replug retrieval augmented black box language models in kevin duh helena gomez and steven bethard eds proceedings of the 2024 conference of the north american chapter of the association for computational linguistics human language technologies volume 1 long papers pp 8371 8384 mexico city mexico june 2024 association for computational",
+            "source": "reference paper3.pdf",
+            "source_path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper3.pdf",
+            "source_type": "local_pdf",
+            "similarity": 0.7016,
+            "match_type": "SEMANTIC_SIMILARITY",
+            "start_word": 6715,
+            "end_word": 6815,
+            "detection_methods": [
+                "SEMANTIC_SIMILARITY"
+            ]
+        }
+    ],
+    "arxiv_abstract_matches": [],
+    "disclaimer": "Similarity is evidence for investigation, not proof of plagiarism. Results cover only the sources checked. Semantic similarity may flag legitimate common concepts. Human review of source passages, citations and quotations is required."
+}

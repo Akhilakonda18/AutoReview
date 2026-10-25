@@ -1,0 +1,52 @@
+{
+  "submitted_pdf": "C:\\major project\\Autoreview\\data\\sample papers\\paper.pdf",
+  "generated_at": "2026-10-25T14:13:49",
+  "summary": {
+    "status": "NO MATCHES FOUND IN CHECKED SOURCES",
+    "submitted_main_text_word_count": 6612,
+    "references_section_found": true,
+    "content_match_records": 0,
+    "exact_match_records": 0,
+    "tfidf_match_records": 0,
+    "semantic_match_records": 0,
+    "bibliographic_possible_duplicate_entries": 0,
+    "estimated_flagged_word_coverage_percent": 0.0,
+    "note": "Similarity is an indicator for human review, not proof of plagiarism. Only the sources checked are covered; zero matches does not prove originality."
+  },
+  "local_reference_matches": [],
+  "bibliographic_matches": [],
+  "arxiv_abstract_matches": [],
+  "reference_pdfs_checked": [
+    {
+      "name": "reference paper1.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper1.pdf",
+      "references_section_detected": true,
+      "total_words": 4060,
+      "main_text_words": 3909,
+      "bibliography_words": 150
+    },
+    {
+      "name": "reference paper2.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper2.pdf",
+      "references_section_detected": true,
+      "total_words": 16502,
+      "main_text_words": 10771,
+      "bibliography_words": 5730
+    },
+    {
+      "name": "reference paper3.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper3.pdf",
+      "references_section_detected": true,
+      "total_words": 16949,
+      "main_text_words": 5777,
+      "bibliography_words": 11171
+    }
+  ],
+  "limitations": [
+    "Only the listed local PDFs and any retrieved arXiv abstracts were checked.",
+    "Bibliographic matches are possible duplicate citation entries, not plagiarism findings.",
+    "Automatic reference parsing can fail on unusual PDF layouts.",
+    "Semantic similarity is not proof of copied text; human review is required.",
+    "Estimated flagged-word coverage is approximate and may overcount overlapping passages."
+  ]
+}

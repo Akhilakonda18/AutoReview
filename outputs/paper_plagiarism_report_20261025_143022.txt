@@ -1,0 +1,40 @@
+AUTOREVIEW - PLAGIARISM SIMILARITY REPORT
+========================================================================
+
+Submitted PDF: data\sample papers\paper.pdf
+Generated: 2026-10-25T14:30:22
+
+SUMMARY
+------------------------------------------------------------------------
+status: NO MATCHES FOUND IN CHECKED SOURCES
+submitted_main_text_word_count: 6612
+references_section_found: True
+content_match_records: 0
+exact_match_records: 0
+tfidf_match_records: 0
+semantic_match_records: 0
+bibliographic_possible_duplicate_entries: 0
+estimated_flagged_word_coverage_percent: 0.0
+note: Similarity is an indicator for human review, not proof of plagiarism. Only the sources checked are covered; zero matches does not prove originality.
+
+LOCAL REFERENCE CONTENT MATCHES
+------------------------------------------------------------------------
+No matches crossed the configured thresholds in checked local reference main text.
+
+POSSIBLE DUPLICATE BIBLIOGRAPHY ENTRIES (NOT A PLAGIARISM SCORE)
+------------------------------------------------------------------------
+No individual reference-entry pairs crossed the configured threshold.
+
+ARXIV ABSTRACT MATCHES
+------------------------------------------------------------------------
+No abstract-level matches reported; this does not establish that no related paper exists.
+
+REFERENCE PDFs CHECKED
+------------------------------------------------------------------------
+reference paper1.pdf | main text: 3909 words | bibliography: 150 words | references heading detected: True
+reference paper2.pdf | main text: 10771 words | bibliography: 5730 words | references heading detected: True
+reference paper3.pdf | main text: 5777 words | bibliography: 11171 words | references heading detected: True
+
+DISCLAIMER
+------------------------------------------------------------------------
+Similarity results require human interpretation. Bibliographic overlaps are not counted as copied main-body content. This tool does not replace a professional plagiarism-detection service.

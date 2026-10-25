@@ -5,3 +5,11 @@ __pycache__/
 *.pyc
 .vscode/
 .ipynb_checkpoints/data/research_dataset/
+# Research datasets and generated indexes
+data/research_dataset/
+
+# Python generated files
+__pycache__/
+*.py[cod]
+venv/
+.venv/

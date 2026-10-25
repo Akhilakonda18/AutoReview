@@ -1,0 +1,68 @@
+{
+  "submitted_pdf": "C:\\major project\\Autoreview\\data\\sample papers\\paper.pdf",
+  "generated_at": "2026-10-25T13:50:13",
+  "summary": {
+    "status": "NO MATCHES FOUND IN CHECKED SOURCES",
+    "submitted_word_count": 6612,
+    "references_section_found": true,
+    "content_match_records": 0,
+    "exact_match_records": 0,
+    "tfidf_match_records": 0,
+    "semantic_match_records": 0,
+    "high_similarity_records": 0,
+    "moderate_similarity_records": 0,
+    "bibliographic_match_records": 1,
+    "estimated_flagged_word_coverage_percent": 0.0,
+    "note": "Similarity results are indicators for human review, not proof of plagiarism. Coverage is an estimate and may overcount overlapping passages."
+  },
+  "local_reference_matches": [],
+  "bibliographic_matches": [
+    {
+      "source": "reference paper3.pdf",
+      "source_type": "local_pdf",
+      "source_path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper3.pdf",
+      "match_type": "BIBLIOGRAPHIC_SIMILARITY",
+      "detection_methods": [
+        "BIBLIOGRAPHY_TFIDF_SIMILARITY"
+      ],
+      "similarity_score": 0.6270037233244371,
+      "submitted_passage": "Baek, J., Jauhar, S. K., Cucerzan, S., and Hwang, S. J.\nResearchagent: Iterative research idea generation over\nscientific literature with large language models. arXiv\npreprint arXiv:2404.07738, 2024.\nChang, M., Chhablani, G., Clegg, A., Cote, M. D., Desai,\nR., Hlavac, M., Karashchuk, V., Krantz, J., Mottaghi, R.,\nParashar, P., et al. Partnr: A benchmark for planning and\nreasoning in embodied multi-agent tasks. arXiv preprint\narXiv:2411.00081, 2024.\nD’Arcy, M., Ross, A., Bransom, E., Kuehl, B., Bragg, J.,\nHope, T., and Downey, D. ARIES: A corpus of scientific\npaper edits made in response to peer reviews. In Asso-\nciation for Computational Linguistics (Volume 1: Long\nPapers), pp. 6985–7001, 2024.\nDu, J., Wang, Y., Zhao, W., Deng, Z., Liu, S., Lou, R.,\nZou, H. P., Narayanan Venkit, P., Zhang, N., Srinath, M.,\nZhang, H. R., Gupta, V., Li, Y., Li, T., Wang, F., Liu, Q.,\nLiu, T., Gao, P., Xia, C., Xing, C., Jiayang, C., Wang, Z.,\nSu, Y., Shah, R. S., Guo, R., Gu, J., Li, H., Wei, K., Wang,\nZ., Cheng, L., Ranathunga, S., Fang, M., Fu, J., Liu, F.,\nHuang, R., Blanco, E., Cao, Y., Zhang, R., Yu, P. S., and\nYin, W. LLMs assist NLP researchers: Critique paper\n(meta-)reviewing. In Conference on Empirical Methods\nin Natural Language Processing, pp. 5081–5099, 2024.\nDycke, N., Kuznetsov, I., and Gurevych, I. NLPeer: A uni-\nfied resource for the computational study of peer review.\nIn Association for Computational Linguistics (Volume 1:\nLong Papers), pp. 5049–5073, 2023.\nFox, C. W., Meyer, J",
+      "reference_passage": "Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and Hannaneh Hajishirzi. Self-RAG: Learning\nto retrieve, generate, and critique through self-reflection. arXiv preprint arXiv:2310.11511, 2023.\nURL https://arxiv.org/abs/2310.11511.\nJinze Bai, Shuai Bai, Yunfei Chu, Zeyu Cui, Kai Dang, Xiaodong Deng, Yang Fan, Wenbin Ge,\nYu Han, Fei Huang, Binyuan Hui, Luo Ji, Mei Li, Junyang Lin, Runji Lin, Dayiheng Liu, Gao Liu,\nChengqiang Lu, Keming Lu, Jianxin Ma, Rui Men, Xingzhang Ren, Xuancheng Ren, Chuanqi\nTan, Sinan Tan, Jianhong Tu, Peng Wang, Shijie Wang, Wei Wang, Shengguang Wu, Benfeng\nXu, Jin Xu, An Yang, Hao Yang, Jian Yang, Shusheng Yang, Yang Yao, Bowen Yu, Hongyi\nYuan, Zheng Yuan, Jianwei Zhang, Xingxuan Zhang, Yichang Zhang, Zhenru Zhang, Chang\nZhou, Jingren Zhou, Xiaohuan Zhou, and Tianhang Zhu. Qwen technical report. arXiv preprint\narXiv:2309.16609, 2023.\nJonathan Berant, Andrew Chou, Roy Frostig, and Percy Liang. Semantic parsing on Freebase from\nquestion-answer pairs. In Proceedings of the 2013 Conference on Empirical Methods in Natural\nLanguage Processing, pp. 1533–1544, Seattle, Washington, USA, October 2013. Association for\nComputational Linguistics. URL https://www.aclweb.org/anthology/D13-1160.\nTom B. Brown, Benjamin Mann, Nick Ryder, Melanie Subbiah, Jared Kaplan, Prafulla Dhari-\nwal, Arvind Neelakantan, Pranav Shyam, Girish Sastry, Amanda Askell, Sandhini Agarwal,\nAriel Herbert-Voss, Gretchen Krueger, Tom Henighan, Rewon Child, Aditya Ramesh, Daniel M.\nZiegler, Jeff"
+    }
+  ],
+  "arxiv_abstract_matches": [],
+  "reference_pdfs_checked": [
+    {
+      "name": "reference paper1.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper1.pdf",
+      "references_section_detected": true,
+      "total_words": 4060,
+      "main_text_words": 3909,
+      "bibliography_words": 150
+    },
+    {
+      "name": "reference paper2.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper2.pdf",
+      "references_section_detected": true,
+      "total_words": 16502,
+      "main_text_words": 10771,
+      "bibliography_words": 5730
+    },
+    {
+      "name": "reference paper3.pdf",
+      "path": "C:\\major project\\Autoreview\\data\\reference papers\\reference paper3.pdf",
+      "references_section_detected": true,
+      "total_words": 16949,
+      "main_text_words": 5777,
+      "bibliography_words": 11171
+    }
+  ],
+  "limitations": [
+    "Only the sources listed in this report were checked.",
+    "arXiv results compare against abstracts, not full papers.",
+    "Semantic similarity does not prove plagiarism.",
+    "Automatic bibliography detection is heuristic and may fail.",
+    "The estimated flagged-word coverage is not a formal plagiarism percentage.",
+    "Human review is required to interpret the results."
+  ]
+}

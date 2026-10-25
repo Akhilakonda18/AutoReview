@@ -1,0 +1,28 @@
+========================================================================
+AUTOREVIEW - PLAGIARISM SIMILARITY REPORT
+========================================================================
+
+Submitted paper: C:\major project\Autoreview\data\sample papers\paper.pdf
+Generated at: 2026-10-25T13:06:49.061872
+
+SUMMARY
+------------------------------------------------------------------------
+Submitted Word Count: 14507
+Flagged Passage Count: 0
+Exact Match Count: 0
+High Similarity Count: 0
+Moderate Similarity Count: 0
+Estimated Flagged Word Coverage Percent: 0.0
+Status: NO SIGNIFICANT MATCH FOUND IN CHECKED SOURCES
+
+LOCAL REFERENCE MATCHES
+------------------------------------------------------------------------
+No passage exceeded the configured similarity threshold in the checked local reference papers.
+
+ARXIV ABSTRACT MATCHES
+------------------------------------------------------------------------
+No significant abstract-level matches were found in the arXiv results checked, or no results were available.
+
+IMPORTANT DISCLAIMER
+------------------------------------------------------------------------
+This report flags textual similarity in the checked sources. It does not prove plagiarism and does not represent a comparison against the entire internet. Human review is required to assess citations, quotations, common technical language, and legitimate reuse.
