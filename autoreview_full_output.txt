@@ -56,7 +56,7 @@ WEAKNESSES:
 - The Discussion of limitations is placed within the Conclusion section rather than receiving a dedicated, standalone discussion subsection, which slightly detracts from a deep independent analysis of broader systemic implications.
 
 MISSING OR UNCLEAR SECTIONS:
-- None. All standard components of a top-tier empirical research paper—including a robust abstract, clear introduction, exhaustive related work, comprehensive methodology, extensive experiments, thorough results analysis, and clear references—are fully present and thoroughly articulated.
+- None. All standard components of a top-tier empirical research paperï¿½including a robust abstract, clear introduction, exhaustive related work, comprehensive methodology, extensive experiments, thorough results analysis, and clear referencesï¿½are fully present and thoroughly articulated.
 
 SUGGESTIONS:
 - Maintain the current high structural standard; ensure future camera-ready iterations preserve the meticulous cross-referencing between the main text and the extensive appendix materials.
@@ -361,7 +361,7 @@ POTENTIAL RESEARCH GAP:
 - Dependence on base proprietary or open-source LLMs which may still exhibit inherent stylistic biases or hallucinated criticisms despite multi-agent discussion phases.
 
 NOVELTY WEAKNESSES:
-- The conceptual components—multi-agent collaboration, RAG-based memory, and multimodal document processing—are individually well-established in general AI literature, though their specific integration for peer review represents the paper's main novelty.
+- The conceptual componentsï¿½multi-agent collaboration, RAG-based memory, and multimodal document processingï¿½are individually well-established in general AI literature, though their specific integration for peer review represents the paper's main novelty.
 - The reliance on an external LLM (ERNIE-Speed-128K) to standardize the Reviews-STD dataset may introduce synthetic artifacts or information loss during formatting conversion.
 
 SUGGESTIONS:
@@ -633,7 +633,7 @@ STRUCTURAL ISSUES:
 - Some methodology subsections rely heavily on high-level textual descriptions of prompts rather than formal pseudocode algorithms.
 
 NOVELTY AND RESEARCH GAP:
-- The core conceptual components—multi-agent collaboration, RAG-based memory, and multimodal document processing—are individually well-established in general AI literature, making their specific integration the paper's primary novelty.
+- The core conceptual componentsï¿½multi-agent collaboration, RAG-based memory, and multimodal document processingï¿½are individually well-established in general AI literature, making their specific integration the paper's primary novelty.
 - The reliance on an external LLM (ERNIE-Speed-128K) to standardize the Reviews-STD dataset risks introducing synthetic artifacts or information loss.
 
 METHODOLOGY ISSUES:
