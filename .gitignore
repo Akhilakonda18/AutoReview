@@ -28,3 +28,10 @@ venv/
 # Temporary files
 .DS_Store
 Thumbs.db
+
+# Generated outputs
+outputs/*.txt
+outputs/*.json
+outputs/uploaded_papers/
+outputs/full_submission_uploads/
+outputs/reports/
