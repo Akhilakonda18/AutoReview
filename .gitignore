@@ -13,3 +13,18 @@ __pycache__/
 *.py[cod]
 venv/
 .venv/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Temporary files
+.DS_Store
+Thumbs.db

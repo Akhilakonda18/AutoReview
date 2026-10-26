@@ -5,11 +5,14 @@ import re
 from core.llm_service import ask_qwen
 
 
+NO_REFERENCE_EVIDENCE = "No reference evidence was retrieved."
+
+
 def _evidence_to_text(evidence, max_chars=9000):
-    """Convert retrieved evidence objects into readable text."""
+    """Convert retrieved evidence into readable, source-labelled text."""
 
     if evidence is None or evidence == [] or evidence == {} or evidence == "":
-        return "No reference evidence was retrieved."
+        return NO_REFERENCE_EVIDENCE
 
     if isinstance(evidence, str):
         return evidence[:max_chars]
@@ -27,6 +30,7 @@ def _evidence_to_text(evidence, max_chars=9000):
                 or item.get("source")
                 or "Unknown source"
             )
+
             content = (
                 item.get("text")
                 or item.get("content")
@@ -34,23 +38,34 @@ def _evidence_to_text(evidence, max_chars=9000):
                 or item.get("page_content")
                 or ""
             )
+
+            similarity = item.get("similarity")
+
+            metadata = (
+                f" | similarity={similarity}"
+                if similarity is not None
+                else ""
+            )
+
         else:
             source = f"Evidence {index}"
             content = str(item)
+            metadata = ""
 
         if content:
             parts.append(
-                f"[Evidence {index} | Source: {source}]\n{content}"
+                f"[Evidence {index} | Source: {source}{metadata}]\n"
+                f"{content}"
             )
 
     if not parts:
-        return "No reference evidence was retrieved."
+        return NO_REFERENCE_EVIDENCE
 
     return "\n\n".join(parts)[:max_chars]
 
 
 def _extract_json_object(response):
-    """Parse JSON, tolerating Markdown fences and surrounding text."""
+    """Extract a JSON object from the model response."""
 
     if not response or not str(response).strip():
         raise ValueError(
@@ -59,16 +74,19 @@ def _extract_json_object(response):
 
     cleaned = str(response).strip()
 
-    # Remove optional Markdown code fences.
     cleaned = re.sub(
         r"^\s*```(?:json)?\s*",
         "",
         cleaned,
         flags=re.IGNORECASE,
     )
-    cleaned = re.sub(r"\s*```\s*$", "", cleaned)
 
-    # First try parsing the complete response.
+    cleaned = re.sub(
+        r"\s*```\s*$",
+        "",
+        cleaned,
+    )
+
     try:
         result = json.loads(cleaned)
 
@@ -78,7 +96,6 @@ def _extract_json_object(response):
     except json.JSONDecodeError:
         pass
 
-    # If extra text exists, find the first valid JSON object.
     decoder = json.JSONDecoder()
 
     for index, character in enumerate(cleaned):
@@ -86,7 +103,9 @@ def _extract_json_object(response):
             continue
 
         try:
-            result, _ = decoder.raw_decode(cleaned[index:])
+            result, _ = decoder.raw_decode(
+                cleaned[index:]
+            )
 
             if isinstance(result, dict):
                 return result
@@ -100,7 +119,7 @@ def _extract_json_object(response):
 
 
 def _as_string_list(value):
-    """Normalize response fields into lists of non-empty strings."""
+    """Normalize a value into a list of non-empty strings."""
 
     if value is None:
         return []
@@ -118,28 +137,59 @@ def _as_string_list(value):
     return []
 
 
-def verify_review(review_text, evidence):
+def _unverified(
+    feedback,
+    unsupported_claims=None,
+    missing_evidence=None,
+):
+    """Return a safe result when verification cannot be completed."""
+
+    return {
+        "status": "UNVERIFIED",
+        "unsupported_claims": _as_string_list(
+            unsupported_claims
+        ),
+        "missing_evidence": _as_string_list(
+            missing_evidence
+        ),
+        "feedback": str(
+            feedback or "Verification could not be completed."
+        ),
+    }
+
+
+def verify_review(
+    review_text,
+    evidence,
+    paper_text=None,
+    agent_name=None,
+):
     """
-    Check whether a specialist review is supported by retrieved evidence.
+    Verify a specialist review against manuscript text and external evidence.
 
-    Returns:
-        status
-        unsupported_claims
-        missing_evidence
-        feedback
+    Backwards-compatible with:
+        verify_review(review_text, evidence)
 
-    This LLM-based check cannot guarantee factual correctness.
+    Optional arguments:
+        paper_text: text extracted from the submitted manuscript.
+        agent_name: name of the specialist agent.
+
+    Possible statuses:
+        SUPPORTED
+        NEEDS_REVISION
+        UNVERIFIED
     """
 
     review_text = str(review_text or "").strip()
+    manuscript_text = str(paper_text or "").strip()
+
     evidence_text = _evidence_to_text(evidence)
 
-    # Handle an empty review.
     if not review_text:
         return {
             "status": "NEEDS_REVISION",
             "unsupported_claims": [
-                "The review is empty."
+                "The specialist review is empty."
             ],
             "missing_evidence": [
                 "A non-empty specialist review is required."
@@ -149,114 +199,170 @@ def verify_review(review_text, evidence):
             ),
         }
 
-    # Handle missing evidence.
-    if evidence_text.startswith(
-        "No reference evidence was retrieved."
+    if (
+        not manuscript_text
+        and evidence_text == NO_REFERENCE_EVIDENCE
     ):
-        return {
-            "status": "NEEDS_REVISION",
-            "unsupported_claims": [
-                "The review cannot be checked against reference evidence."
-            ],
-            "missing_evidence": [
-                "Retrieve relevant reference evidence for the review."
-            ],
-            "feedback": (
-                "Retrieve relevant sources. Clearly distinguish "
-                "paper-specific observations from claims requiring "
-                "external evidence."
+        return _unverified(
+            (
+                "Neither manuscript text nor retrieved "
+                "reference evidence was supplied."
             ),
-        }
+            missing_evidence=[
+                (
+                    "Supply the manuscript text and/or "
+                    "relevant external research evidence."
+                )
+            ],
+        )
+
+    if not manuscript_text:
+        manuscript_text = (
+            "MANUSCRIPT TEXT NOT PROVIDED. Claims about the "
+            "submitted paper's own sections, methods, datasets, "
+            "and results cannot be checked against the manuscript."
+        )
+
+    if evidence_text == NO_REFERENCE_EVIDENCE:
+        evidence_text = (
+            "NO EXTERNAL REFERENCE EVIDENCE WAS RETRIEVED. "
+            "Claims about prior research, the state of the art, "
+            "and novelty cannot be verified against external sources."
+        )
 
     prompt = f"""
-You are an evidence-verification component in AutoReview,
+You are the evidence verifier for AutoReview,
 an automated research-paper review system.
 
-TASK:
-Check whether the specialist review below is supported by the
-provided retrieved reference evidence.
+SPECIALIST AGENT:
+{agent_name or "Unspecified specialist agent"}
 
-IMPORTANT RULES:
-1. Do not assume a claim is supported just because it sounds plausible.
-2. A related reference does not automatically support a specific claim.
-3. Distinguish claims about the submitted paper from claims about prior research.
-4. Identify factual claims, comparisons, and numerical statements
-   that lack adequate support.
-5. Do not require every sentence to have a citation.
-6. Do not invent sources, facts, or evidence.
-7. Judge support using the supplied evidence only.
-8. If evidence is insufficient, request specific additional evidence.
+TASK:
+Evaluate the material factual claims in the specialist review
+against the appropriate supplied source.
+
+SOURCE RULES:
+
+1. Claims about what the submitted manuscript contains, implements,
+   measures, or reports must be checked against the manuscript text.
+
+2. Claims about prior research, comparisons with existing methods,
+   research gaps, novelty, and the state of the art must be checked
+   against external research evidence.
+
+3. Do not use external papers to prove what the submitted manuscript
+   itself contains.
+
+4. Do not use the manuscript alone to establish claims about the
+   entire research field.
+
+5. If the relevant source is missing, do not mark the claim as verified.
+   Explain what additional evidence is needed.
+
+6. Editorial suggestions do not all require external citations.
+   Evaluate whether material factual findings have a reasonable basis.
+
+7. Do not assume a claim is supported merely because it sounds plausible.
+
+8. Do not invent facts, quotations, sources, or numerical values.
+
 9. Return one valid JSON object only.
-10. The status must be SUPPORTED or NEEDS_REVISION.
+
+10. Use SUPPORTED only when material factual claims are adequately
+    supported by the appropriate supplied sources.
+
+11. Use NEEDS_REVISION when material claims are contradicted or
+    unsupported by the available evidence.
+
+12. Use UNVERIFIED when the available material is insufficient to
+    complete a meaningful check.
 
 SPECIALIST REVIEW:
 {review_text[:10000]}
 
-RETRIEVED REFERENCE EVIDENCE:
-{evidence_text}
+SUBMITTED MANUSCRIPT TEXT:
+{manuscript_text[:14000]}
 
-Return this JSON structure:
+EXTERNAL RESEARCH EVIDENCE:
+{evidence_text[:9000]}
+
+Return exactly this JSON structure:
+
 {{
   "status": "SUPPORTED",
   "unsupported_claims": [],
   "missing_evidence": [],
-  "feedback": "Concise explanation"
+  "feedback": "Concise explanation of the verification decision"
 }}
 
-Use SUPPORTED only when important evidence-dependent claims are
-adequately supported.
-
-If material claims are unsupported or the evidence is insufficient,
-use NEEDS_REVISION.
-
-When the status is SUPPORTED, use empty arrays for the two list
-fields unless there is a specific unresolved issue.
+When material claims cannot be checked because a source is missing,
+use UNVERIFIED rather than assuming the claims are false or supported.
 """
 
-    # Ask the existing Gemini service to verify the review.
-    response = ask_qwen(prompt, max_tokens=900)
+    try:
+        response = ask_qwen(
+            prompt,
+            max_tokens=900,
+        )
 
-    # Parse the response without crashing on malformed JSON.
+    except Exception as error:
+        return _unverified(
+            (
+                "Verifier API call failed with "
+                f"{type(error).__name__}. Check the model service, "
+                "internet connection, and API quota."
+            )
+        )
+
     try:
         result = _extract_json_object(response)
 
     except ValueError as error:
-        return {
-            "status": "UNVERIFIED",
-            "unsupported_claims": [],
-            "missing_evidence": [],
-            "feedback": str(error),
-        }
+        return _unverified(str(error))
 
     status = str(
         result.get("status", "")
     ).strip().upper()
 
-    # Do not treat an invalid status as a successful verification.
-    if status not in {"SUPPORTED", "NEEDS_REVISION"}:
-        return {
-            "status": "UNVERIFIED",
-            "unsupported_claims": _as_string_list(
-                result.get("unsupported_claims")
-            ),
-            "missing_evidence": _as_string_list(
-                result.get("missing_evidence")
-            ),
-            "feedback": (
+    unsupported_claims = _as_string_list(
+        result.get("unsupported_claims")
+    )
+
+    missing_evidence = _as_string_list(
+        result.get("missing_evidence")
+    )
+
+    feedback = str(
+        result.get("feedback", "")
+    ).strip()
+
+    if status not in {
+        "SUPPORTED",
+        "NEEDS_REVISION",
+        "UNVERIFIED",
+    }:
+        return _unverified(
+            (
                 "Verifier returned an invalid status. "
-                + str(result.get("feedback", "")).strip()
-            ).strip(),
-        }
+                "The review has not been verified."
+            ),
+            unsupported_claims,
+            missing_evidence,
+        )
+
+    # A SUPPORTED response cannot simultaneously list unsupported claims.
+    if status == "SUPPORTED" and unsupported_claims:
+        status = "NEEDS_REVISION"
+
+        feedback = (
+            feedback + " "
+            + "Status changed to NEEDS_REVISION because "
+            "unsupported claims were listed."
+        ).strip()
 
     return {
         "status": status,
-        "unsupported_claims": _as_string_list(
-            result.get("unsupported_claims")
-        ),
-        "missing_evidence": _as_string_list(
-            result.get("missing_evidence")
-        ),
-        "feedback": str(
-            result.get("feedback", "")
-        ).strip(),
+        "unsupported_claims": unsupported_claims,
+        "missing_evidence": missing_evidence,
+        "feedback": feedback,
     }

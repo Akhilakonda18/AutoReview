@@ -3,100 +3,55 @@ from core.llm_service import ask_qwen
 
 
 class StructureAgent(BaseAgent):
-
     def __init__(self):
         super().__init__("Structure Agent")
 
     def build_prompt(self, paper_text, retrieved_evidence=""):
+        return f"""
+You are the Structure Agent in an automated research-paper review system.
+Evaluate the manuscript's structure and organization: abstract, introduction, related work, methodology, experiments/evaluation, results, discussion, conclusion, references, ordering, and flow. Assess only what is visible in the manuscript. Do not infer a missing section if text extraction may be incomplete; state that it cannot be determined when appropriate. Retrieved papers are not a basis for judging the manuscript's structure.
 
-        prompt = f"""
-You are the Structure Agent in an automated research paper
-review system.
+Rules:
+- Treat the submitted manuscript as the primary source for claims about its own content.
+- Treat retrieved papers only as external comparison/context; they cannot prove what this manuscript did.
+- Never invent facts, citations, quotations, numbers, results, headings, or implementation details.
+- If information is absent from the supplied text, say "not reported in the supplied manuscript."
+- Distinguish "not found in retrieved evidence" from "does not exist."
+- If the supplied text or evidence is insufficient, explicitly state the limitation and avoid definitive claims.
+- Give a score from 0 to 10 for structural completeness, organization, and clarity.
+- Provide specific, actionable observations anchored in the supplied text/evidence.
 
-Your task is to evaluate the structure and organization of
-the research paper.
+Retrieved External Evidence:
+{retrieved_evidence or "No external evidence supplied."}
 
-Evaluate:
+Submitted Manuscript:
+{paper_text or "[No manuscript text supplied]"}
 
-1. Abstract
-2. Introduction
-3. Related Work
-4. Methodology
-5. Experiments
-6. Results
-7. Discussion
-8. Conclusion
-9. References
-10. Overall organization
-
-Give a score from 0 to 10.
-
-Identify:
-
-- Strengths
-- Weaknesses
-- Missing or unclear sections
-- Suggestions for improvement
-
-Use the retrieved research evidence only when it is relevant.
-
-Retrieved Evidence:
-{retrieved_evidence}
-
-Research Paper:
-{paper_text}
-
-Return the result in exactly this format:
+Return exactly this format:
 
 SCORE: X/10
 
 STRENGTHS:
-- point 1
-- point 2
+- ...
 
 WEAKNESSES:
-- point 1
-- point 2
+- ...
 
-MISSING OR UNCLEAR SECTIONS:
-- point 1
-- point 2
+KEY FINDINGS / GAPS:
+- ...
 
 SUGGESTIONS:
-- point 1
-- point 2
+- ...
+
+EVIDENCE AND LIMITATIONS:
+- ...
 """
 
-        return prompt
-
     def review(self, paper_text, retrieved_evidence=""):
-
-        prompt = self.build_prompt(
-            paper_text,
-            retrieved_evidence
-        )
-
-        response = ask_qwen(prompt)
-
-        return {
-            "agent": self.name,
-            "review": response
-        }
+        response = ask_qwen(self.build_prompt(paper_text, retrieved_evidence))
+        return {"agent": self.name, "review": response}
 
 
 if __name__ == "__main__":
-
-    agent = StructureAgent()
-
-    sample_paper = """
-    This is a sample research paper about
-    Large Language Models and automated peer review.
-    """
-
-    result = agent.review(sample_paper)
-
-    print("=" * 60)
-    print("STRUCTURE AGENT")
-    print("=" * 60)
-
+    result = StructureAgent().review("Sample manuscript text for a basic smoke test.")
     print(result["review"])

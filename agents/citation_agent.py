@@ -3,115 +3,55 @@ from core.llm_service import ask_qwen
 
 
 class CitationAgent(BaseAgent):
-
     def __init__(self):
         super().__init__("Citation Agent")
 
     def build_prompt(self, paper_text, retrieved_evidence=""):
+        return f"""
+You are the Citation Verification Agent in an automated research-paper review system.
+Evaluate visible citation consistency, reference-list completeness, citation coverage, and potentially unsupported claims using the manuscript and supplied external evidence. Do not invent citation numbers, authors, titles, years, DOIs, or reference entries. Distinguish a topic worth investigating from a definitely missing reference. A retrieved paper is not automatically a required citation. State when partial text prevents full verification.
 
-        prompt = f"""
-You are the Citation Verification Agent in an automated
-research paper review system.
+Rules:
+- Treat the submitted manuscript as the primary source for claims about its own content.
+- Treat retrieved papers only as external comparison/context; they cannot prove what this manuscript did.
+- Never invent facts, citations, quotations, numbers, results, headings, or implementation details.
+- If information is absent from the supplied text, say "not reported in the supplied manuscript."
+- Distinguish "not found in retrieved evidence" from "does not exist."
+- If the supplied text or evidence is insufficient, explicitly state the limitation and avoid definitive claims.
+- Give a score from 0 to 10 for visible quality and consistency of citation practices.
+- Provide specific, actionable observations anchored in the supplied text/evidence.
 
-Evaluate the citation and reference quality of the research
-paper using only the information available in the paper and
-the retrieved research evidence.
+Retrieved External Evidence:
+{retrieved_evidence or "No external evidence supplied."}
 
-Analyze:
+Submitted Manuscript:
+{paper_text or "[No manuscript text supplied]"}
 
-1. Citation consistency
-2. Citation coverage of important claims
-3. Relevance of cited literature
-4. References related to the research topic
-5. Potentially unsupported claims
-6. Potential missing literature
-7. Reference quality and completeness
-
-Important:
-Do not invent citation numbers, authors, titles, or papers.
-If the available information is insufficient to verify a
-citation, clearly state that it cannot be verified.
-
-Give a CITATION SCORE from 0 to 10.
-
-Retrieved Research Evidence:
-{retrieved_evidence}
-
-Research Paper:
-{paper_text}
-
-Return the result in exactly this format:
+Return exactly this format:
 
 CITATION SCORE: X/10
 
 STRENGTHS:
-- point 1
-- point 2
+- ...
 
 WEAKNESSES:
-- point 1
-- point 2
+- ...
 
-POTENTIALLY UNSUPPORTED CLAIMS:
-- point 1
-- point 2
-
-MISSING LITERATURE AREAS:
-- point 1
-- point 2
-
-RECOMMENDED REFERENCE TOPICS:
-- topic 1
-- topic 2
+KEY FINDINGS / GAPS:
+- ...
 
 SUGGESTIONS:
-- point 1
-- point 2
+- ...
 
-EVIDENCE:
-- point 1
-- point 2
+EVIDENCE AND LIMITATIONS:
+- ...
 """
 
-        return prompt
-
     def review(self, paper_text, retrieved_evidence=""):
-
-        prompt = self.build_prompt(
-            paper_text,
-            retrieved_evidence
-        )
-
-        response = ask_qwen(prompt)
-
-        return {
-            "agent": self.name,
-            "review": response
-        }
+        response = ask_qwen(self.build_prompt(paper_text, retrieved_evidence))
+        return {"agent": self.name, "review": response}
 
 
 if __name__ == "__main__":
-
-    agent = CitationAgent()
-
-    sample_paper = """
-    This research paper proposes a new AI framework for
-    automated research paper review using large language
-    models and retrieval augmented generation.
-    """
-
-    sample_evidence = """
-    Previous research has explored automated peer review,
-    LLM-based paper evaluation, RAG, and multi-agent systems.
-    """
-
-    result = agent.review(
-        sample_paper,
-        sample_evidence
-    )
-
-    print("=" * 60)
-    print("CITATION AGENT")
-    print("=" * 60)
-
+    result = CitationAgent().review("Sample manuscript text for a basic smoke test.")
     print(result["review"])

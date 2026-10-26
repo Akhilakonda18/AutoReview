@@ -1,3 +1,4 @@
+
 from core.llm_service import ask_qwen
 
 
@@ -6,68 +7,156 @@ class FinalReviewer:
     def __init__(self):
         self.name = "Final Reviewer Agent"
 
+    @staticmethod
+    def _review_to_text(review):
+        """Convert a specialist result into readable text."""
+
+        if isinstance(review, dict):
+            return str(
+                review.get("review")
+                or review.get("content")
+                or review
+            )
+
+        return str(review or "")
+
+    @staticmethod
+    def _verification_to_text(verification_results):
+        """Format verification results for the final reviewer."""
+
+        if not verification_results:
+            return (
+                "No verification results were supplied. "
+                "Treat specialist findings as unverified."
+            )
+
+        blocks = []
+
+        for agent_name, result in verification_results.items():
+
+            if not isinstance(result, dict):
+                blocks.append(
+                    f"{agent_name}: UNVERIFIED "
+                    "(invalid result format)"
+                )
+                continue
+
+            status = str(
+                result.get("status", "UNVERIFIED")
+            ).strip().upper()
+
+            if status not in {
+                "SUPPORTED",
+                "NEEDS_REVISION",
+                "UNVERIFIED",
+            }:
+                status = "UNVERIFIED"
+
+            blocks.append(
+                f"""
+AGENT: {agent_name}
+
+VERIFICATION STATUS:
+{status}
+
+UNSUPPORTED CLAIMS:
+{result.get("unsupported_claims", [])}
+
+MISSING EVIDENCE:
+{result.get("missing_evidence", [])}
+
+VERIFIER FEEDBACK:
+{result.get("feedback", "")}
+"""
+            )
+
+        return "\n\n".join(blocks)
+
     def build_prompt(
         self,
         paper_text,
         specialist_results,
-        overall_score
+        overall_score,
+        verification_results=None,
     ):
 
-        # Keep the paper itself out of the final prompt.
-        # The specialist agents have already analyzed it.
-        #
-        # This prevents the prompt from becoming too large.
+        specialist_blocks = []
 
-        specialist_text = ""
+        for agent_name, review in (
+            specialist_results or {}
+        ).items():
 
-        for agent_name, review in specialist_results.items():
-
-            specialist_text += f"""
-
+            specialist_blocks.append(
+                f"""
 ==============================
 {agent_name}
 ==============================
 
-{review}
-
+{self._review_to_text(review)}
 """
+            )
+
+        specialist_text = (
+            "\n\n".join(specialist_blocks)
+            if specialist_blocks
+            else "No specialist reviews were supplied."
+        )
+
+        verification_text = self._verification_to_text(
+            verification_results
+        )
 
         prompt = f"""
-You are the Final Reviewer Agent in an automated
-research paper review system.
+You are the Final Reviewer Agent in AutoReview,
+an automated research-paper review system.
 
-Your task is to consolidate the outputs of seven
-specialist review agents into one final research
-paper review.
-
-The specialist agents are:
-
-1. Structure Agent
-2. Novelty Agent
-3. Methodology Agent
-4. Literature Agent
-5. Experiment Agent
-6. Writing Agent
-7. Citation Agent
+Your task is to consolidate seven specialist reviews into
+a useful, consistent final assessment.
 
 IMPORTANT RULES:
 
-- Do not invent information.
-- Use only the specialist reviews provided below.
-- Preserve important weaknesses identified by agents.
-- Preserve important strengths identified by agents.
-- Identify common problems appearing across multiple agents.
-- Identify conflicting observations if they exist.
-- Give practical recommendations.
-- Do not repeat the entire specialist reviews.
-- Produce a concise but complete consolidated review.
+1. Preserve important strengths and weaknesses.
 
-The calculated average score from the specialist agents is:
+2. Do not invent manuscript details, sources, citations,
+   experiments, results, or numerical values.
 
-OVERALL SCORE: {overall_score}/10
+3. Do not present an unverified claim as an established fact.
+
+4. Findings marked SUPPORTED may be described as supported
+   by the supplied evidence. This does not guarantee absolute truth.
+
+5. Findings marked NEEDS_REVISION must not be presented as
+   established facts. Describe them as concerns that need correction
+   or additional evidence.
+
+6. Findings marked UNVERIFIED must not be presented as verified.
+   If important, include them in UNVERIFIED CONCERNS.
+
+7. If verification results are missing, explicitly state that
+   independent evidence verification was not provided.
+
+8. If the verifier failed because of an API or quota error,
+   report the limitation. Do not conclude that the specialist's
+   finding is false merely because verification failed.
+
+9. Identify disagreements between specialist agents instead of
+   silently resolving them.
+
+10. Combine repeated findings where appropriate.
+
+11. Give specific and practical recommendations.
+
+12. The overall score below was calculated by the existing
+    specialist scoring system. Do not change it.
+
+CALCULATED SPECIALIST SCORE:
+{overall_score}/10
 
 SPECIALIST REVIEWS:
-{specialist_text}
+{specialist_text[:18000]}
+
+VERIFICATION RESULTS:
+{verification_text[:9000]}
 
 Return the final review in exactly this format:
 
@@ -78,54 +167,63 @@ FINAL CONSOLIDATED REVIEW
 OVERALL SCORE:
 {overall_score}/10
 
+VERIFICATION SUMMARY:
+- Summarize the verification results supplied.
+- State clearly if verification results were unavailable.
+
 EXECUTIVE SUMMARY:
-- point 1
-- point 2
-- point 3
+- Point 1
+- Point 2
+- Point 3
 
 MAJOR STRENGTHS:
-- point 1
-- point 2
-- point 3
+- Point 1
+- Point 2
+- Point 3
 
 MAJOR WEAKNESSES:
-- point 1
-- point 2
-- point 3
+- Point 1
+- Point 2
+- Point 3
 
 STRUCTURAL ISSUES:
-- point 1
-- point 2
+- Point 1
+- Point 2
 
 NOVELTY AND RESEARCH GAP:
-- point 1
-- point 2
+- Point 1
+- Point 2
 
 METHODOLOGY ISSUES:
-- point 1
-- point 2
+- Point 1
+- Point 2
 
 EXPERIMENTAL ISSUES:
-- point 1
-- point 2
+- Point 1
+- Point 2
 
 LITERATURE AND CITATION ISSUES:
-- point 1
-- point 2
+- Point 1
+- Point 2
 
 WRITING ISSUES:
-- point 1
-- point 2
+- Point 1
+- Point 2
+
+UNVERIFIED CONCERNS:
+- List important concerns requiring additional evidence.
+- If none are identified, say so explicitly.
 
 PRIORITY RECOMMENDATIONS:
-1. recommendation
-2. recommendation
-3. recommendation
-4. recommendation
-5. recommendation
+1. Recommendation
+2. Recommendation
+3. Recommendation
+4. Recommendation
+5. Recommendation
 
 FINAL ASSESSMENT:
-- concise overall assessment
+- Provide a concise assessment distinguishing the specialist score
+  from the confidence provided by evidence verification.
 """
 
         return prompt
@@ -134,29 +232,42 @@ FINAL ASSESSMENT:
         self,
         paper_text,
         specialist_results,
-        overall_score
+        overall_score,
+        verification_results=None,
     ):
 
         if not specialist_results:
-
             return (
                 "Final Reviewer could not run because "
                 "no specialist agent results were available."
             )
 
         prompt = self.build_prompt(
-            paper_text,
-            specialist_results,
-            overall_score
+            paper_text=paper_text,
+            specialist_results=specialist_results,
+            overall_score=overall_score,
+            verification_results=verification_results,
         )
 
-        # IMPORTANT:
-        # Do NOT use max_retries here.
-        # Your ask_qwen() function does not accept it.
+        try:
+            response = ask_qwen(
+                prompt,
+                max_tokens=1800,
+            )
 
-        response = ask_qwen(
-            prompt,
-            max_tokens=1500
-        )
+            if not response or not str(response).strip():
+                return (
+                    "Final Reviewer returned an empty response. "
+                    "Check the model service and API quota."
+                )
 
-        return response
+            return response
+
+        except Exception as error:
+            return (
+                "Final Reviewer could not complete the consolidated "
+                f"review ({type(error).__name__}). Check the model "
+                "service, internet connection, and API quota. "
+                "Preserve the specialist results and verification "
+                "statuses from this run."
+            )

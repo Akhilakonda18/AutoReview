@@ -3,114 +3,55 @@ from core.llm_service import ask_qwen
 
 
 class ExperimentAgent(BaseAgent):
-
     def __init__(self):
         super().__init__("Experiment Agent")
 
     def build_prompt(self, paper_text, retrieved_evidence=""):
+        return f"""
+You are the Experiment Evaluation Agent in an automated research-paper review system.
+Evaluate reported datasets, setup/splits, baselines, metrics, results, ablations, statistical analysis, limitations, and reproducibility. Never invent numerical results or claim an experiment was performed unless the manuscript reports it. Phrase absent details as not reported, without assuming the experiment was never done. Retrieved papers cannot verify this manuscript's results.
 
-        prompt = f"""
-You are the Experiment Evaluation Agent in an automated
-research paper review system.
+Rules:
+- Treat the submitted manuscript as the primary source for claims about its own content.
+- Treat retrieved papers only as external comparison/context; they cannot prove what this manuscript did.
+- Never invent facts, citations, quotations, numbers, results, headings, or implementation details.
+- If information is absent from the supplied text, say "not reported in the supplied manuscript."
+- Distinguish "not found in retrieved evidence" from "does not exist."
+- If the supplied text or evidence is insufficient, explicitly state the limitation and avoid definitive claims.
+- Give a score from 0 to 10 for strength and transparency of the reported evaluation.
+- Provide specific, actionable observations anchored in the supplied text/evidence.
 
-Evaluate the experimental quality of the research paper.
+Retrieved External Evidence:
+{retrieved_evidence or "No external evidence supplied."}
 
-Analyze:
+Submitted Manuscript:
+{paper_text or "[No manuscript text supplied]"}
 
-1. Dataset description and suitability
-2. Experimental setup
-3. Baseline comparisons
-4. Evaluation metrics
-5. Results and interpretation
-6. Ablation studies
-7. Statistical analysis
-8. Reproducibility of experiments
-9. Limitations of the experimental evaluation
-
-Give an EXPERIMENT SCORE from 0 to 10.
-
-Do not invent experimental results that are not present
-in the paper.
-
-Retrieved Research Evidence:
-{retrieved_evidence}
-
-Research Paper:
-{paper_text}
-
-Return the result in exactly this format:
+Return exactly this format:
 
 EXPERIMENT SCORE: X/10
 
 STRENGTHS:
-- point 1
-- point 2
+- ...
 
 WEAKNESSES:
-- point 1
-- point 2
+- ...
 
-EXPERIMENTAL GAPS:
-- point 1
-- point 2
-
-BASELINE EVALUATION:
-- point 1
-- point 2
-
-REPRODUCIBILITY:
-- point 1
-- point 2
+KEY FINDINGS / GAPS:
+- ...
 
 SUGGESTIONS:
-- point 1
-- point 2
+- ...
 
-EVIDENCE:
-- point 1
-- point 2
+EVIDENCE AND LIMITATIONS:
+- ...
 """
 
-        return prompt
-
     def review(self, paper_text, retrieved_evidence=""):
-
-        prompt = self.build_prompt(
-            paper_text,
-            retrieved_evidence
-        )
-
-        response = ask_qwen(prompt)
-
-        return {
-            "agent": self.name,
-            "review": response
-        }
+        response = ask_qwen(self.build_prompt(paper_text, retrieved_evidence))
+        return {"agent": self.name, "review": response}
 
 
 if __name__ == "__main__":
-
-    agent = ExperimentAgent()
-
-    sample_paper = """
-    This paper proposes an AI-based research paper review
-    framework. The system is evaluated using a dataset of
-    research papers and several evaluation metrics.
-    """
-
-    sample_evidence = """
-    Existing research paper review systems commonly compare
-    their methods against baseline approaches and report
-    evaluation metrics.
-    """
-
-    result = agent.review(
-        sample_paper,
-        sample_evidence
-    )
-
-    print("=" * 60)
-    print("EXPERIMENT AGENT")
-    print("=" * 60)
-
+    result = ExperimentAgent().review("Sample manuscript text for a basic smoke test.")
     print(result["review"])

@@ -1,15 +1,19 @@
 
+from pathlib import Path
+
 from core.pdf_parser import extract_text
 from core.section_identifier import identify_sections
 from core.rag import retrieve_chunks
 from core.score_fusion import ScoreFusion
 from core.report_generator import generate_report
 from core.evidence_verifier import verify_review
-from core.review_pipeline import AGENT_QUERIES, build_agent_query, format_evidence
+from core.review_pipeline import (
+    AGENT_QUERIES,
+    build_agent_query,
+    format_evidence,
+)
 
-from pathlib import Path
 from plagiarism_checker import run_plagiarism_check
-
 from agents.agent_manager import AgentManager
 from agents.final_reviewer import FinalReviewer
 
@@ -19,7 +23,12 @@ from agents.final_reviewer import FinalReviewer
 # =========================================================
 
 PDF_PATH = "data/sample papers/paper.pdf"
-REFERENCE_DIRS = [Path("data/reference papers"), Path("data/reference_papers")]
+
+REFERENCE_DIRS = [
+    Path("data/reference papers"),
+    Path("data/reference_papers"),
+]
+
 RUN_PLAGIARISM_CHECK = True
 
 
@@ -34,9 +43,14 @@ def normalize_list(value):
         return []
 
     if isinstance(value, list):
-        return [str(item).strip() for item in value if str(item).strip()]
+        return [
+            str(item).strip()
+            for item in value
+            if str(item).strip()
+        ]
 
     value = str(value).strip()
+
     return [value] if value else []
 
 
@@ -54,38 +68,48 @@ def build_verification_summary(verification_results):
     for agent_name, verification in verification_results.items():
         lines.append("")
         lines.append(f"Agent: {agent_name}")
+
         lines.append(
-            f"Final verification status: "
+            "Final verification status: "
             f"{verification.get('status', 'UNVERIFIED')}"
         )
+
         lines.append(
-            f"Correction attempts: {verification.get('attempts', 0)}"
+            "Correction attempts: "
+            f"{verification.get('attempts', 0)}"
         )
 
         feedback = verification.get("feedback", "")
+
         if feedback:
             lines.append(f"Verifier feedback: {feedback}")
 
         unsupported = normalize_list(
             verification.get("unsupported_claims", [])
         )
+
         if unsupported:
             lines.append("Claims requiring further checking:")
+
             for claim in unsupported:
                 lines.append(f"- {claim}")
 
         missing = normalize_list(
             verification.get("missing_evidence", [])
         )
+
         if missing:
             lines.append("Missing evidence:")
+
             for item in missing:
                 lines.append(f"- {item}")
 
     lines.extend([
         "",
-        "Note: LLM-based verification is an aid, not a guarantee "
-        "of factual correctness. Unverified claims require human review.",
+        (
+            "Note: LLM-based verification is an aid, not a guarantee "
+            "of factual correctness. Unverified claims require human review."
+        ),
         "=" * 60,
     ])
 
@@ -93,49 +117,109 @@ def build_verification_summary(verification_results):
 
 
 def build_plagiarism_summary(plagiarism_result):
-    """Format plagiarism-check results for the consolidated AutoReview report."""
+    """Format plagiarism-check results for the consolidated report."""
 
     if not isinstance(plagiarism_result, dict):
         return (
             "PLAGIARISM SIMILARITY CHECK\n"
             "Status: NOT COMPLETED\n"
-            "The plagiarism checker did not return a result. Please review its error."
+            "The plagiarism checker did not return a result. "
+            "Please review its error."
         )
 
     summary = plagiarism_result.get("summary", {})
+
     lines = [
         "",
         "=" * 60,
         "PLAGIARISM SIMILARITY CHECK",
         "=" * 60,
         f"Status: {summary.get('status', 'UNKNOWN')}",
-        f"Main-text words checked: {summary.get('submitted_main_text_word_count', 'N/A')}",
+        (
+            "Main-text words checked: "
+            f"{summary.get('submitted_main_text_word_count', 'N/A')}"
+        ),
         f"Exact-match records: {summary.get('exact_match_records', 0)}",
         f"TF-IDF match records: {summary.get('tfidf_match_records', 0)}",
-        f"Semantic match records: {summary.get('semantic_match_records', 0)}",
-        f"Possible duplicate bibliography entries: {summary.get('bibliographic_possible_duplicate_entries', 0)}",
-        f"Estimated flagged-word coverage: {summary.get('estimated_flagged_word_coverage_percent', 0)}%",
+        (
+            "Semantic match records: "
+            f"{summary.get('semantic_match_records', 0)}"
+        ),
+        (
+            "Possible duplicate bibliography entries: "
+            f"{summary.get('bibliographic_possible_duplicate_entries', 0)}"
+        ),
+        (
+            "Estimated flagged-word coverage: "
+            f"{summary.get('estimated_flagged_word_coverage_percent', 0)}%"
+        ),
     ]
 
     checked = plagiarism_result.get("reference_pdfs_checked", [])
+
     if checked:
         lines.append(f"Reference PDFs checked: {len(checked)}")
+
         for reference in checked:
-            lines.append(f"- {reference.get('name', 'Unknown reference')}")
+            lines.append(
+                f"- {reference.get('name', 'Unknown reference')}"
+            )
 
     if plagiarism_result.get("txt_report"):
-        lines.append(f"Detailed text report: {plagiarism_result['txt_report']}")
+        lines.append(
+            f"Detailed text report: {plagiarism_result['txt_report']}"
+        )
+
     if plagiarism_result.get("json_report"):
-        lines.append(f"Detailed JSON report: {plagiarism_result['json_report']}")
+        lines.append(
+            f"Detailed JSON report: {plagiarism_result['json_report']}"
+        )
 
     lines.append(
         summary.get(
             "note",
-            "Similarity results require human review and do not prove or disprove plagiarism.",
+            "Similarity results require human review and do not prove "
+            "or disprove plagiarism.",
         )
     )
+
     lines.append("=" * 60)
+
     return "\n".join(lines)
+
+
+def safe_verification_result(result, fallback_feedback):
+    """Normalize verifier output so the pipeline can continue safely."""
+
+    if not isinstance(result, dict):
+        return {
+            "status": "UNVERIFIED",
+            "feedback": fallback_feedback,
+            "unsupported_claims": [],
+            "missing_evidence": [],
+        }
+
+    status = str(
+        result.get("status", "UNVERIFIED")
+    ).strip().upper()
+
+    if status not in {
+        "SUPPORTED",
+        "NEEDS_REVISION",
+        "UNVERIFIED",
+    }:
+        status = "UNVERIFIED"
+
+    return {
+        "status": status,
+        "feedback": str(result.get("feedback", "")),
+        "unsupported_claims": normalize_list(
+            result.get("unsupported_claims", [])
+        ),
+        "missing_evidence": normalize_list(
+            result.get("missing_evidence", [])
+        ),
+    }
 
 
 # =========================================================
@@ -155,10 +239,17 @@ def run_full_review():
     print("\n[1] Reading research paper...")
 
     try:
+        if not Path(PDF_PATH).is_file():
+            raise FileNotFoundError(
+                f"Research paper was not found: {PDF_PATH}"
+            )
+
         paper_text = extract_text(PDF_PATH)
 
         if not paper_text or not paper_text.strip():
-            raise ValueError("No text was extracted from the PDF.")
+            raise ValueError(
+                "No text was extracted from the PDF."
+            )
 
     except Exception as error:
         print("\nERROR reading research paper:")
@@ -168,7 +259,6 @@ def run_full_review():
     print("Characters extracted:", len(paper_text))
     print("Words extracted:", len(paper_text.split()))
 
-
     # =====================================================
     # 1A. PLAGIARISM SIMILARITY CHECK
     # =====================================================
@@ -177,9 +267,16 @@ def run_full_review():
     plagiarism_summary = ""
 
     if RUN_PLAGIARISM_CHECK:
+
         print("\n[1A] Running plagiarism similarity checker...")
+
         try:
-            existing_reference_dirs = [str(path) for path in REFERENCE_DIRS if path.is_dir()]
+            existing_reference_dirs = [
+                str(path)
+                for path in REFERENCE_DIRS
+                if path.is_dir()
+            ]
+
             if not existing_reference_dirs:
                 existing_reference_dirs = None
 
@@ -188,17 +285,24 @@ def run_full_review():
                 reference_dirs=existing_reference_dirs,
                 offline=True,
             )
-            plagiarism_summary = build_plagiarism_summary(plagiarism_result)
+
+            plagiarism_summary = build_plagiarism_summary(
+                plagiarism_result
+            )
+
             print(plagiarism_summary)
+
         except Exception as error:
             print("\nPLAGIARISM CHECK ERROR:")
             print(error)
+
             plagiarism_summary = (
                 "PLAGIARISM SIMILARITY CHECK\n"
                 "Status: NOT COMPLETED\n"
                 f"Error: {error}\n"
                 "The rest of AutoReview will continue."
             )
+
     else:
         plagiarism_summary = (
             "PLAGIARISM SIMILARITY CHECK\n"
@@ -237,14 +341,31 @@ def run_full_review():
 
     try:
         for agent_name in AGENT_QUERIES:
-            query = build_agent_query(agent_name, paper_text, sections)
+
+            query = build_agent_query(
+                agent_name,
+                paper_text,
+                sections,
+            )
+
             try:
-                retrieved = retrieve_chunks(query, top_k=5) or []
+                retrieved = retrieve_chunks(
+                    query,
+                    top_k=5,
+                ) or []
+
             except Exception as error:
-                print(f"Warning: RAG retrieval failed for {agent_name}: {error}")
+                print(
+                    f"Warning: RAG retrieval failed for "
+                    f"{agent_name}: {error}"
+                )
+
                 retrieved = []
 
-            evidence_by_agent[agent_name] = format_evidence(retrieved)
+            evidence_by_agent[agent_name] = format_evidence(
+                retrieved
+            )
+
             print(
                 f"Retrieved {len(retrieved)} evidence chunks "
                 f"for {agent_name}"
@@ -253,8 +374,11 @@ def run_full_review():
     except Exception as error:
         print("\nRAG ERROR:")
         print(error)
+
         evidence_by_agent = {
-            agent_name: "No relevant reference evidence was retrieved."
+            agent_name: (
+                "No relevant reference evidence was retrieved."
+            )
             for agent_name in AGENT_QUERIES
         }
 
@@ -268,7 +392,10 @@ def run_full_review():
 
     manager = AgentManager()
 
-    results = manager.run_all(paper_text, evidence_by_agent)
+    results = manager.run_all(
+        paper_text,
+        evidence_by_agent,
+    )
 
     if not isinstance(results, dict) or not results:
         print("\nERROR:")
@@ -292,12 +419,15 @@ def run_full_review():
 
         if agent_name not in results:
             verification_results[agent_name] = {
-                "status": "NOT_RUN",
+                "status": "UNVERIFIED",
                 "attempts": 0,
-                "feedback": "No specialist review was generated.",
+                "feedback": (
+                    "No specialist review was generated."
+                ),
                 "unsupported_claims": [],
                 "missing_evidence": [],
             }
+
             continue
 
         print(f"\nVerifying: {agent_name}")
@@ -305,25 +435,34 @@ def run_full_review():
         current_review = results[agent_name]
         attempts = 0
 
+        agent_evidence = evidence_by_agent.get(
+            agent_name,
+            "No relevant reference evidence was retrieved.",
+        )
+
         try:
-            agent_evidence = evidence_by_agent.get(agent_name, "No relevant reference evidence was retrieved.")
-            verification = verify_review(current_review, agent_evidence, paper_text=paper_text)
+            # Verify the review against the manuscript and
+            # the external research evidence separately.
+            verification = verify_review(
+                current_review,
+                agent_evidence,
+                paper_text=paper_text,
+                agent_name=agent_name,
+            )
 
-            if not isinstance(verification, dict):
-                verification = {
-                    "status": "UNVERIFIED",
-                    "feedback": "Verifier returned an invalid result.",
-                    "unsupported_claims": [],
-                    "missing_evidence": [],
-                }
+            verification = safe_verification_result(
+                verification,
+                "Verifier returned an invalid result.",
+            )
 
-            status = str(
-                verification.get("status", "UNVERIFIED")
-            ).strip().upper()
+            status = verification["status"]
 
             print("Verification status:", status)
 
-            # Attempt correction only when revision is requested.
+            # -------------------------------------------------
+            # SELF-CORRECTION: ONE ATTEMPT
+            # -------------------------------------------------
+
             if status == "NEEDS_REVISION":
 
                 attempts = 1
@@ -342,7 +481,8 @@ def run_full_review():
 
                 correction_instructions = f"""
 SELF-CORRECTION INSTRUCTIONS
-These instructions are feedback, not research evidence.
+
+These instructions are verifier feedback, not research evidence.
 
 Verification feedback:
 {feedback or "Review the unsupported claims and evidence gaps."}
@@ -358,81 +498,98 @@ Evidence gaps to address:
 Requirements:
 1. Revise only where necessary.
 2. Do not invent facts, citations, quotations, or experimental results.
-3. Do not claim that a reference supports a statement unless the supplied
+3. Do not claim a reference supports a statement unless the supplied
    evidence actually supports it.
-4. Clearly distinguish statements about the submitted paper from claims
-   about external research.
-5. If evidence is insufficient, acknowledge the limitation rather than
-   pretending the claim has been verified.
+4. Distinguish statements about the submitted paper from claims about
+   external research.
+5. If evidence is insufficient, acknowledge the limitation.
 6. Preserve the specialist review's original purpose and structure.
 """
 
-                print(f"Attempting correction for {agent_name}...")
+                print(
+                    f"Attempting correction for {agent_name}..."
+                )
 
                 corrected_name, corrected_review = (
                     manager.run_single_agent(
                         agent,
                         paper_text,
-                        agent_evidence + "\n\n" + correction_instructions,
+                        str(agent_evidence)
+                        + "\n\n"
+                        + correction_instructions,
                     )
                 )
 
-                if corrected_review and str(corrected_review).strip():
+                if (
+                    corrected_review
+                    and str(corrected_review).strip()
+                ):
 
-                    # Replace the original only when a correction exists.
+                    # Replace the original review with the
+                    # corrected review.
                     results[agent_name] = corrected_review
 
-                    print(f"Rechecking corrected review: {agent_name}")
+                    print(
+                        f"Rechecking corrected review: {agent_name}"
+                    )
 
+                    # Re-verify using both source categories.
                     verification = verify_review(
                         corrected_review,
                         agent_evidence,
                         paper_text=paper_text,
+                        agent_name=agent_name,
                     )
 
-                    if not isinstance(verification, dict):
-                        verification = {
-                            "status": "UNVERIFIED",
-                            "feedback": (
-                                "Verifier returned an invalid result "
-                                "after correction."
-                            ),
-                            "unsupported_claims": [],
-                            "missing_evidence": [],
-                        }
+                    verification = safe_verification_result(
+                        verification,
+                        (
+                            "Verifier returned an invalid result "
+                            "after correction."
+                        ),
+                    )
 
-                    final_status = str(
-                        verification.get("status", "UNVERIFIED")
-                    ).strip().upper()
-
-                    print("Verification after correction:", final_status)
+                    print(
+                        "Verification after correction:",
+                        verification["status"],
+                    )
 
                 else:
+                    # Retain the original review and clearly
+                    # record that correction did not succeed.
                     verification = {
-                        "status": "CORRECTION_FAILED",
+                        "status": "NEEDS_REVISION",
                         "feedback": (
-                            "The specialist did not produce a corrected review."
-                        ),
+                            "The specialist did not produce a corrected "
+                            "review. The original review remains in place. "
+                            + feedback
+                        ).strip(),
                         "unsupported_claims": unsupported_claims,
                         "missing_evidence": missing_evidence,
                     }
 
-            else:
-                # SUPPORTED and UNVERIFIED are retained without correction.
-                verification["status"] = status
+            # SUPPORTED and UNVERIFIED reviews are not automatically
+            # changed. Their statuses are passed to the final reviewer.
 
         except Exception as error:
 
-            print(f"Verification/correction error for {agent_name}: {error}")
+            print(
+                f"Verification/correction error for "
+                f"{agent_name}: {error}"
+            )
 
             verification = {
                 "status": "UNVERIFIED",
-                "feedback": str(error),
+                "feedback": (
+                    "Verification could not be completed "
+                    f"({type(error).__name__})."
+                ),
                 "unsupported_claims": [],
                 "missing_evidence": [],
             }
 
         verification["attempts"] = attempts
+
         verification_results[agent_name] = verification
 
     # =====================================================
@@ -445,7 +602,10 @@ Requirements:
     print("=" * 70)
 
     fusion = ScoreFusion()
-    overall_score = fusion.calculate_overall_score(results)
+
+    overall_score = fusion.calculate_overall_score(
+        results
+    )
 
     print("\nIndividual Agent Scores:")
 
@@ -473,13 +633,19 @@ Requirements:
     try:
         reviewer = FinalReviewer()
 
+        # IMPORTANT:
+        # Pass verification_results to the final reviewer so
+        # it can distinguish supported, revision-needed,
+        # and unverified specialist findings.
         final_review = reviewer.review(
             paper_text,
             results,
             overall_score,
+            verification_results=verification_results,
         )
 
     except Exception as error:
+
         print("\nERROR while running Final Reviewer:")
         print(error)
 
@@ -488,14 +654,20 @@ Requirements:
             f"Error: {error}"
         )
 
-    # Add the verification summary so it is included in the report.
+    # =====================================================
+    # 6A. BUILD FINAL REPORT SUMMARIES
+    # =====================================================
+
     verification_summary = build_verification_summary(
         verification_results
     )
 
     final_review_with_verification = (
-        str(final_review) + "\n\n" + verification_summary
-        + "\n\n" + plagiarism_summary
+        str(final_review)
+        + "\n\n"
+        + verification_summary
+        + "\n\n"
+        + plagiarism_summary
     )
 
     # =====================================================
@@ -545,11 +717,21 @@ Requirements:
     print("=" * 70)
 
     for agent_name, verification in verification_results.items():
+
         print(f"\n{agent_name}")
-        print("Status:", verification.get("status", "UNVERIFIED"))
-        print("Correction attempts:", verification.get("attempts", 0))
+
+        print(
+            "Status:",
+            verification.get("status", "UNVERIFIED"),
+        )
+
+        print(
+            "Correction attempts:",
+            verification.get("attempts", 0),
+        )
 
         feedback = verification.get("feedback", "")
+
         if feedback:
             print("Feedback:", feedback)
 

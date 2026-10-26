@@ -10,3 +10,4 @@ huggingface-hub
 torch
 onnxruntime
 fastembed
+beautifulsoup4

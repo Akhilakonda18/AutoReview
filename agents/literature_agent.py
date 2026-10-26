@@ -3,115 +3,55 @@ from core.llm_service import ask_qwen
 
 
 class LiteratureAgent(BaseAgent):
-
     def __init__(self):
         super().__init__("Literature Agent")
 
     def build_prompt(self, paper_text, retrieved_evidence=""):
+        return f"""
+You are the Literature Review Agent in an automated research-paper review system.
+Evaluate the manuscript's related-work coverage, organization, relevance of cited studies, explanation of the research gap, and connection to the proposed work. Use retrieved evidence to identify potentially relevant literature areas, but never claim a reference is missing from the entire literature based on limited retrieval. Do not invent bibliographic details.
 
-        prompt = f"""
-You are the Literature Review Agent in an automated
-research paper review system.
+Rules:
+- Treat the submitted manuscript as the primary source for claims about its own content.
+- Treat retrieved papers only as external comparison/context; they cannot prove what this manuscript did.
+- Never invent facts, citations, quotations, numbers, results, headings, or implementation details.
+- If information is absent from the supplied text, say "not reported in the supplied manuscript."
+- Distinguish "not found in retrieved evidence" from "does not exist."
+- If the supplied text or evidence is insufficient, explicitly state the limitation and avoid definitive claims.
+- Give a score from 0 to 10 for quality and substantiation of the literature review.
+- Provide specific, actionable observations anchored in the supplied text/evidence.
 
-Evaluate the literature review and related work of the
-research paper.
+Retrieved External Evidence:
+{retrieved_evidence or "No external evidence supplied."}
 
-Analyze:
+Submitted Manuscript:
+{paper_text or "[No manuscript text supplied]"}
 
-1. Coverage of existing research
-2. Relevance of cited studies
-3. Organization of related work
-4. Identification of research gaps
-5. Use of recent and important references
-6. Connection between previous work and the proposed work
-7. Missing relevant literature
-
-Use the retrieved research papers as supporting evidence.
-
-Do not claim that a reference is definitely missing unless
-the available evidence supports that conclusion.
-
-Give a LITERATURE SCORE from 0 to 10.
-
-Retrieved Research Evidence:
-{retrieved_evidence}
-
-Research Paper:
-{paper_text}
-
-Return the result in exactly this format:
+Return exactly this format:
 
 LITERATURE SCORE: X/10
 
 STRENGTHS:
-- point 1
-- point 2
+- ...
 
 WEAKNESSES:
-- point 1
-- point 2
+- ...
 
-MISSING LITERATURE AREAS:
-- point 1
-- point 2
-
-RESEARCH GAPS:
-- point 1
-- point 2
-
-RECOMMENDED REFERENCES:
-- topic or paper area 1
-- topic or paper area 2
+KEY FINDINGS / GAPS:
+- ...
 
 SUGGESTIONS:
-- point 1
-- point 2
+- ...
 
-EVIDENCE:
-- point 1
-- point 2
+EVIDENCE AND LIMITATIONS:
+- ...
 """
 
-        return prompt
-
     def review(self, paper_text, retrieved_evidence=""):
-
-        prompt = self.build_prompt(
-            paper_text,
-            retrieved_evidence
-        )
-
-        response = ask_qwen(prompt)
-
-        return {
-            "agent": self.name,
-            "review": response
-        }
+        response = ask_qwen(self.build_prompt(paper_text, retrieved_evidence))
+        return {"agent": self.name, "review": response}
 
 
 if __name__ == "__main__":
-
-    agent = LiteratureAgent()
-
-    sample_paper = """
-    This paper proposes an automated research paper review
-    framework using Large Language Models and RAG.
-    The related work discusses existing LLM-based review
-    systems.
-    """
-
-    sample_evidence = """
-    Existing research has explored automated peer review,
-    LLM-based paper evaluation, RAG, and multi-agent review.
-    """
-
-    result = agent.review(
-        sample_paper,
-        sample_evidence
-    )
-
-    print("=" * 60)
-    print("LITERATURE AGENT")
-    print("=" * 60)
-
+    result = LiteratureAgent().review("Sample manuscript text for a basic smoke test.")
     print(result["review"])

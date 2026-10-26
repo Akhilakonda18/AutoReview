@@ -3,105 +3,55 @@ from core.llm_service import ask_qwen
 
 
 class MethodologyAgent(BaseAgent):
-
     def __init__(self):
         super().__init__("Methodology Agent")
 
     def build_prompt(self, paper_text, retrieved_evidence=""):
+        return f"""
+You are the Methodology Agent in an automated research-paper review system.
+Evaluate the described research design, algorithm/model, dataset and preprocessing, experimental procedure, baselines, metrics, assumptions, limitations, and reproducibility. Do not infer unreported datasets, hyperparameters, metrics, or procedures. Retrieved papers may provide comparison context but cannot establish what this manuscript implemented.
 
-        prompt = f"""
-You are the Methodology Agent in an automated research
-paper review system.
+Rules:
+- Treat the submitted manuscript as the primary source for claims about its own content.
+- Treat retrieved papers only as external comparison/context; they cannot prove what this manuscript did.
+- Never invent facts, citations, quotations, numbers, results, headings, or implementation details.
+- If information is absent from the supplied text, say "not reported in the supplied manuscript."
+- Distinguish "not found in retrieved evidence" from "does not exist."
+- If the supplied text or evidence is insufficient, explicitly state the limitation and avoid definitive claims.
+- Give a score from 0 to 10 for methodological clarity, rigor, and reproducibility.
+- Provide specific, actionable observations anchored in the supplied text/evidence.
 
-Evaluate the methodology of the research paper.
+Retrieved External Evidence:
+{retrieved_evidence or "No external evidence supplied."}
 
-Analyze:
+Submitted Manuscript:
+{paper_text or "[No manuscript text supplied]"}
 
-1. Research methodology
-2. Proposed algorithms or models
-3. Dataset and data preparation
-4. Experimental procedure
-5. Baseline methods
-6. Evaluation metrics
-7. Reproducibility
-8. Methodological limitations
-
-Give a METHODOLOGY SCORE from 0 to 10.
-
-Retrieved Research Evidence:
-{retrieved_evidence}
-
-Research Paper:
-{paper_text}
-
-Return the result in exactly this format:
+Return exactly this format:
 
 METHODOLOGY SCORE: X/10
 
 STRENGTHS:
-- point 1
-- point 2
+- ...
 
 WEAKNESSES:
-- point 1
-- point 2
+- ...
 
-METHODOLOGICAL GAPS:
-- point 1
-- point 2
-
-REPRODUCIBILITY:
-- point 1
-- point 2
+KEY FINDINGS / GAPS:
+- ...
 
 SUGGESTIONS:
-- point 1
-- point 2
+- ...
 
-EVIDENCE:
-- point 1
-- point 2
+EVIDENCE AND LIMITATIONS:
+- ...
 """
 
-        return prompt
-
     def review(self, paper_text, retrieved_evidence=""):
-
-        prompt = self.build_prompt(
-            paper_text,
-            retrieved_evidence
-        )
-
-        response = ask_qwen(prompt)
-
-        return {
-            "agent": self.name,
-            "review": response
-        }
+        response = ask_qwen(self.build_prompt(paper_text, retrieved_evidence))
+        return {"agent": self.name, "review": response}
 
 
 if __name__ == "__main__":
-
-    agent = MethodologyAgent()
-
-    sample_paper = """
-    This paper proposes a machine learning framework
-    for automated research paper evaluation.
-    The model is evaluated using a research paper dataset.
-    """
-
-    sample_evidence = """
-    Existing research uses different machine learning
-    and language-model-based approaches for paper review.
-    """
-
-    result = agent.review(
-        sample_paper,
-        sample_evidence
-    )
-
-    print("=" * 60)
-    print("METHODOLOGY AGENT")
-    print("=" * 60)
-
+    result = MethodologyAgent().review("Sample manuscript text for a basic smoke test.")
     print(result["review"])
